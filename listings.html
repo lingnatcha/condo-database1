@@ -1,0 +1,22 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>Listings</title>
+<link rel="stylesheet" href="/styles.css">
+<h1>Listings</h1>
+<div id="list"></div>
+<script>
+const sample=[{title:"Asoke 1BR High Floor",availability:"Rented",rented_until:"2025-12-31",status:"Rent",project:"The XXX Asoke",location:"Asok",price:28000,bedrooms:1,bathrooms:1,size:34}];
+function card(d){const note=(d.availability==="Rented"&&d.rented_until)?`<p><em>Rented until: ${d.rented_until}</em></p>`:"";
+  return `<div style="border:1px solid #eee;padding:12px;border-radius:12px;margin:10px 0">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <h3 style="margin:0">${d.title}</h3>
+      <span style="font-size:12px;padding:4px 8px;border-radius:999px;border:1px solid #dee2e6;background:${d.availability==='Available'?'#d3f9d8':'#f1f3f5'}">${d.availability}</span>
+    </div>
+    <p><strong>${d.status}</strong> · ${d.location} · ${d.project}</p>
+    <p><strong>Beds:</strong> ${d.bedrooms} · <strong>Baths:</strong> ${d.bathrooms} · <strong>Size:</strong> ${d.size} sqm</p>
+    <p><strong>Price:</strong> ฿${d.price}</p>
+    ${note}
+    <p><a href="/contact.html">Enquire</a></p>
+  </div>`;}
+document.getElementById('list').innerHTML=sample.map(card).join('');
+</script>
