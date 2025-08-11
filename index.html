@@ -1,48 +1,47 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="utf-8" />
   <title>Condo Database</title>
-  <link rel="stylesheet" href="styles.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
-  <!-- Header -->
+  <!-- Header / Nav -->
   <header>
-    <div class="container header-container">
-      <img src="images/uploads/logo.png" alt="Condo Database Logo" class="logo">
-      <h1>Condo Database</h1>
-    </div>
+    <nav class="navbar">
+      <div class="logo-container">
+        <a href="index.html" aria-label="Condo Database home">
+          <img src="images/logo.png" alt="Condo Database" class="logo">
+        </a>
+      </div>
+      <ul>
+        <li><a href="listings.html">Listings</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="admin/">Admin</a></li>
+      </ul>
+    </nav>
   </header>
 
-  <!-- Hero Section -->
-  <section class="hero">
-    <img src="images/uploads/hero.jpg" alt="Bangkok Skyline" class="hero-image">
-    <div class="hero-text">
-      <h2>Your trusted source for Bangkok condo listings</h2>
-      <p>Browse, compare, and find the perfect condo in Bangkok.</p>
+  <!-- Hero -->
+  <section class="hero" style="background:linear-gradient(180deg,rgba(0,0,0,.35),rgba(0,0,0,.35)), url('images/hero.jpg') center/cover no-repeat; color:#fff; padding:60px 20px;">
+    <div class="container">
+      <h1 style="margin:0 0 10px 0;">Condo Database</h1>
+      <p style="margin:0; opacity:.95;">Bangkok condo listings curated for you. Updated daily via our CMS.</p>
     </div>
   </section>
 
-  <!-- Navigation -->
-  <nav class="main-nav">
-    <ul>
-      <li><a href="listings.html">Listings</a></li>
-      <li><a href="contact.html">Contact</a></li>
-      <li><a href="admin/">Admin</a></li>
-    </ul>
-  </nav>
-
-  <!-- Main Content -->
-  <main class="container">
-    <h2>Welcome to Condo Database</h2>
-    <p>We specialize in providing up-to-date condo listings in Bangkok. Whether you’re buying, selling, or renting, our platform helps you make informed decisions.</p>
+  <!-- Content -->
+  <main class="container" style="padding:24px 20px;">
+    <h2>Why choose us?</h2>
+    <p>Local expertise, transparent listings, and fast communication via LINE, WhatsApp, phone, or email.</p>
+    <p><a class="btn" href="listings.html">Browse listings →</a></p>
   </main>
 
-  <!-- Footer -->
-  <footer>
-    <p>&copy; 2025 Condo Database. All rights reserved.</p>
+  <footer class="container" style="padding:40px 20px; color:#555;">
+    <strong>Condo Database</strong><br>
+    Bangkok, Thailand
   </footer>
 
 </body>
