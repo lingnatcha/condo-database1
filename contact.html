@@ -2,52 +2,73 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Contact — Condo Database</title>
   <link rel="stylesheet" href="/styles.css" />
-  <link rel="icon" href="/images/logo.png" />
 </head>
 <body>
-  <header class="nav">
-    <a class="brand" href="/"><img src="/images/logo.png" alt="logo" /><span>Condo Database</span></a>
-    <nav>
-      <a href="/listings.html">Listings</a>
-      <a href="/contact.html">Contact</a>
-      <a href="/admin/">Admin</a>
-    </nav>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container inner">
+      <a href="/" class="brand">
+        <img src="/images/logo.png" alt="Condo Database" class="logo" />
+        <span class="title">Condo Database</span>
+      </a>
+      <nav class="nav">
+        <a href="/listings.html">Listings</a>
+        <a href="/contact.html">Contact</a>
+        <a href="/admin/">Admin</a>
+      </nav>
+    </div>
   </header>
 
-  <section class="hero" style="background-image:linear-gradient(180deg, rgba(0,0,0,.45), rgba(0,0,0,.55)), url('/images/hero.jpg')">
-    <div class="hero-inner">
+  <!-- Hero -->
+  <section class="contact-hero">
+    <div class="container">
       <h1>Contact Us</h1>
-      <p>LINE, WhatsApp, phone, or email — whatever is easiest for you.</p>
-      <div class="cta-row">
-        <a class="btn line" href="https://line.me/R/ti/p/@vry5685n" target="_blank" rel="noopener">LINE: @vry5685n</a>
-        <a class="btn primary" href="https://wa.me/66882553324" target="_blank" rel="noopener">WhatsApp: +66 88 255 3324</a>
-        <a class="btn ghost" href="tel:+66882553324">Call: 088-255-3324</a>
-        <a class="btn ghost" href="mailto:info@condo-database.com">info@condo-database.com</a>
-      </div>
+      <p style="opacity:.9;margin:.25rem 0 0">LINE, WhatsApp, phone, or email — whatever is easiest for you.</p>
     </div>
   </section>
 
-  <section class="highlights" style="max-width:800px">
-    <div class="card" style="grid-column:1/-1">
-      <h3>Quick Enquiry</h3>
-      <form name="contact" method="POST" data-netlify="true">
+  <!-- Quick contact buttons -->
+  <div class="container">
+    <div class="contact-cards">
+      <a class="contact-card" href="https://line.me/R/ti/p/@vry5685n" target="_blank" rel="noopener">LINE: @vry5685n</a>
+      <a class="contact-card" href="https://wa.me/66882553324" target="_blank" rel="noopener">WhatsApp: +66 88 255 3324</a>
+      <a class="contact-card" href="tel:+66882553324">Call: 088-255-3324</a>
+      <a class="contact-card" href="mailto:info@condo-database.com">info@condo-database.com</a>
+    </div>
+  </div>
+
+  <!-- Form -->
+  <div class="container">
+    <div class="contact-wrap">
+      <h2 style="margin:0 0 12px">Quick Enquiry</h2>
+      <form name="contact" method="POST" data-netlify="true" class="form-grid">
         <input type="hidden" name="form-name" value="contact" />
-        <p><label>Name<br><input name="name" required></label></p>
-        <p><label>Email<br><input name="email" type="email" required></label></p>
-        <p><label>Phone / LINE ID<br><input name="phone"></label></p>
-        <p><label>Message<br><textarea name="message" rows="5" required></textarea></label></p>
-        <p><button class="btn primary" type="submit">Send</button></p>
+        <div>
+          <label for="name">Name</label>
+          <input id="name" name="name" type="text" required />
+        </div>
+        <div>
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" required />
+        </div>
+        <div>
+          <label for="phone">Phone / LINE ID</label>
+          <input id="phone" name="phone" type="text" />
+        </div>
+        <div>
+          <label for="message">Message</label>
+          <textarea id="message" name="message" required></textarea>
+        </div>
+        <div>
+          <button class="btn" type="submit">Send</button>
+        </div>
       </form>
     </div>
-  </section>
+  </div>
 
-  <footer class="footer">
-    <div><strong>Condo Database</strong><br>Bangkok, Thailand</div>
-    <div><a href="mailto:info@condo-database.com">info@condo-database.com</a><br><a href="tel:+66882553324">+66 88 255 3324</a></div>
-    <div><a href="https://line.me/R/ti/p/@vry5685n" target="_blank">LINE</a><br><a href="https://wa.me/66882553324" target="_blank">WhatsApp</a></div>
-  </footer>
 </body>
 </html>
