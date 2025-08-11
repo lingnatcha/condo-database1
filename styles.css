@@ -208,6 +208,33 @@ header img[src*="logo"], img[alt*="logo"] { max-height: 48px; width: auto; }
   border-radius: 6px;
 }
 .nav a:hover { background: #f1f5f9; }
+/* Align logo and nav links vertically */
+.navbar {
+  display: flex;
+  align-items: center;
+}
+
+.navbar img.logo {
+  height: 40px;  /* adjust logo size */
+  margin-right: 10px;
+}
+
+.navbar ul {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar ul li {
+  list-style: none;
+  margin-left: 20px;
+}
+
+.navbar ul li a {
+  text-decoration: none;
+  color: #000; /* or your nav link color */
+}
 
 /* ====== Contact page ====== */
 .contact-hero {
