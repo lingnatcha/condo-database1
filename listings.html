@@ -1,22 +1,77 @@
 <!doctype html>
-<meta charset="utf-8">
-<title>Listings</title>
-<link rel="stylesheet" href="/styles.css">
-<h1>Listings</h1>
-<div id="list"></div>
-<script>
-const sample=[{title:"Asoke 1BR High Floor",availability:"Rented",rented_until:"2025-12-31",status:"Rent",project:"The XXX Asoke",location:"Asok",price:28000,bedrooms:1,bathrooms:1,size:34}];
-function card(d){const note=(d.availability==="Rented"&&d.rented_until)?`<p><em>Rented until: ${d.rented_until}</em></p>`:"";
-  return `<div style="border:1px solid #eee;padding:12px;border-radius:12px;margin:10px 0">
-    <div style="display:flex;justify-content:space-between;align-items:center">
-      <h3 style="margin:0">${d.title}</h3>
-      <span style="font-size:12px;padding:4px 8px;border-radius:999px;border:1px solid #dee2e6;background:${d.availability==='Available'?'#d3f9d8':'#f1f3f5'}">${d.availability}</span>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Listings — Condo Database</title>
+  <link rel="stylesheet" href="/styles.css" />
+  <link rel="icon" href="/images/logo.png" />
+</head>
+<body>
+  <header class="nav">
+    <a class="brand" href="/">
+      <img src="/images/logo.png" alt="logo" />
+      <span>Condo Database</span>
+    </a>
+    <nav>
+      <a href="/listings.html">Listings</a>
+      <a href="/contact.html">Contact</a>
+      <a href="/admin/">Admin</a>
+    </nav>
+  </header>
+
+  <section class="hero" style="background-image:linear-gradient(180deg, rgba(0,0,0,.45), rgba(0,0,0,.55)), url('/images/hero.jpg')">
+    <div class="hero-inner">
+      <h1>Available Listings</h1>
+      <p>Browse our curated Bangkok condos. Updated daily via our CMS.</p>
     </div>
-    <p><strong>${d.status}</strong> · ${d.location} · ${d.project}</p>
-    <p><strong>Beds:</strong> ${d.bedrooms} · <strong>Baths:</strong> ${d.bathrooms} · <strong>Size:</strong> ${d.size} sqm</p>
-    <p><strong>Price:</strong> ฿${d.price}</p>
-    ${note}
-    <p><a href="/contact.html">Enquire</a></p>
-  </div>`;}
-document.getElementById('list').innerHTML=sample.map(card).join('');
-</script>
+  </section>
+
+  <section class="highlights" id="listing-container" style="max-width:1000px">
+    <!-- Listings will be inserted here -->
+  </section>
+
+  <footer class="footer">
+    <div><strong>Condo Database</strong><br>Bangkok, Thailand</div>
+    <div><a href="mailto:info@condo-database.com">info@condo-database.com</a><br><a href="tel:+66882553324">+66 88 255 3324</a></div>
+    <div><a href="https://line.me/R/ti/p/@vry5685n" target="_blank">LINE</a><br><a href="https://wa.me/66882553324" target="_blank">WhatsApp</a></div>
+  </footer>
+
+  <script>
+    async function loadListings() {
+      try {
+        const container = document.getElementById('listing-container');
+
+        // Fetch all markdown files in content/listings
+        const listingFiles = [
+          // Add manually if your CMS generates predictable slugs
+          // e.g., "/content/listings/listing1.md"
+        ];
+
+        // If you have a static site build (like Eleventy or Hugo), this part will be replaced by templating.
+        // For plain HTML/NetlifyCMS, we can fetch via Netlify's Identity + Git API OR prebuild JSON in admin config.
+        // For now, we’ll show a placeholder:
+        container.innerHTML = `
+          <div class="card">
+            <h3>Example Condo — 2 Bed @ Asoke</h3>
+            <p><strong>Price:</strong> 35,000 THB/month</p>
+            <p><strong>Size:</strong> 65 sqm</p>
+            <p><strong>Status:</strong> Available</p>
+            <img src="/images/uploads/example.jpg" alt="Example Condo" style="max-width:100%;border-radius:8px;margin-top:8px">
+          </div>
+          <div class="card">
+            <h3>Example Condo — 1 Bed @ Thong Lo</h3>
+            <p><strong>Price:</strong> 28,000 THB/month</p>
+            <p><strong>Size:</strong> 45 sqm</p>
+            <p><strong>Status:</strong> <span style="color:red">Rented until 15 Dec 2025</span></p>
+            <img src="/images/uploads/example2.jpg" alt="Example Condo" style="max-width:100%;border-radius:8px;margin-top:8px">
+          </div>
+        `;
+      } catch (err) {
+        console.error('Error loading listings', err);
+      }
+    }
+    loadListings();
+  </script>
+</body>
+</html>
