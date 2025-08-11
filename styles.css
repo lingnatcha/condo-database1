@@ -167,3 +167,119 @@ footer p{
 .m-0{margin:0}
 .mt-2{margin-top:.5rem}
 .mt-3{margin-top:1rem}
+/* ====== Global reset helpers ====== */
+* { box-sizing: border-box; }
+img { max-width: 100%; height: auto; }
+
+/* ====== Layout ====== */
+.container {
+  width: min(1100px, 92%);
+  margin: 0 auto;
+}
+
+/* ====== Header / Nav ====== */
+.site-header {
+  border-bottom: 1px solid #e9ecef;
+  background: #fff;
+}
+.site-header .inner {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 14px 0;
+}
+.brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; }
+.brand .logo { height: 44px; width: auto; display: block; }         /* main logo cap */
+.brand .title { font-weight: 700; color: #0f172a; text-decoration: none; }
+
+/* Fallback for places you didn’t add class="logo" */
+header img[src*="logo"], img[alt*="logo"] { max-height: 48px; width: auto; }
+
+/* Nav links */
+.nav {
+  margin-left: auto;
+  display: flex;
+  gap: 16px;
+}
+.nav a {
+  color: #334155;
+  text-decoration: none;
+  padding: 6px 8px;
+  border-radius: 6px;
+}
+.nav a:hover { background: #f1f5f9; }
+
+/* ====== Contact page ====== */
+.contact-hero {
+  background: linear-gradient(180deg, #4b5563, #1f2937);
+  color: #fff;
+  padding: 28px 0 22px;
+}
+.contact-hero h1 { margin: 0; font-size: 28px; font-weight: 700; }
+
+.contact-cards {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0,1fr));
+  gap: 10px;
+  margin: 12px 0 18px;
+}
+.contact-card {
+  background: #2563eb;
+  color: #fff;
+  border-radius: 8px;
+  padding: 10px 12px;
+  text-align: center;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 1px 0 rgba(0,0,0,.04);
+}
+.contact-card:hover { filter: brightness(1.05); }
+
+.contact-wrap {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 18px;
+  margin: 18px 0 40px;
+}
+
+.form-grid { display: grid; gap: 14px; }
+label { font-weight: 600; color: #0f172a; }
+
+input[type="text"], input[type="email"], textarea {
+  width: 100%;
+  font: inherit;
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #fff;
+}
+textarea { min-height: 160px; resize: vertical; }
+
+.btn {
+  display: inline-block;
+  border: 0;
+  background: #2563eb;
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.btn:hover { filter: brightness(1.06); }
+
+/* ====== Listings fixes ====== */
+/* If a logo image ever appears inside content by mistake, keep it small */
+.listings .logo, .listings img[src*="logo"], .listings img[alt*="logo"] {
+  max-height: 48px;
+  width: auto;
+}
+
+/* ====== Responsive ====== */
+@media (max-width: 840px) {
+  .contact-cards { grid-template-columns: repeat(2, minmax(0,1fr)); }
+}
+@media (max-width: 520px) {
+  .brand .logo { height: 38px; }
+  .contact-cards { grid-template-columns: 1fr; }
+}
