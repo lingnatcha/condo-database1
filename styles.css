@@ -1,6 +1,8 @@
-/* ---------- Base ---------- */
+/* ======================
+   Base & Theme
+====================== */
 :root{
-  --brand:#2f63c7;        /* สีน้ำเงินโลโก้ */
+  --brand:#2f63c7;
   --brand-2:#1b3f86;
   --ink:#1b1d21;
   --muted:#667085;
@@ -9,41 +11,70 @@
   --bg-soft:#f6f8fb;
   --success:#0ea5e9;
 }
-*{box-sizing:border-box}
-html,body{margin:0;padding:0}
+
+* { box-sizing: border-box; }
+html,body{ margin:0; padding:0; }
 body{
   font-family: ui-sans-serif, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
   color:var(--ink);
   background:var(--bg);
   line-height:1.6;
 }
+img{ max-width:100%; height:auto; display:block; }
 
-/* ---------- Layout ---------- */
+/* ======================
+   Layout
+====================== */
 .container{
   width:min(1100px, 92%);
-  margin-inline:auto;
+  margin:0 auto;
 }
-header{
+
+/* ======================
+   Header / Nav
+====================== */
+.site-header{
   border-bottom:1px solid var(--line);
   background:#fff;
 }
-.header-container{
+.site-header .inner{
   display:flex;
   align-items:center;
-  gap:14px;
+  gap:18px;
   padding:14px 0;
 }
-.logo{
-  width:38px;height:38px;object-fit:contain;
-}
-h1{
-  font-size:1.25rem;
-  margin:0;
-  font-weight:700;
-  color:var(--brand);
-}
 
-/* ---------- Hero ---------- */
+/* Brand (logo + title) */
+.brand{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  text-decoration:none;
+}
+.brand .logo{ height:44px; width:auto; }      /* ✅ control logo size globally */
+.brand .title{ font-weight:700; color:#0f172a; text-decoration:none; }
+
+/* Fallback if an <img> logo is used without .logo class */
+header img[src*="logo"], img[alt*="logo"]{ max-height:48px; width:auto; }
+
+/* Right nav links */
+.nav{
+  margin-left:auto;
+  display:flex;
+  align-items:center;            /* ✅ vertical align with logo */
+  gap:16px;
+}
+.nav a{
+  color:#334155;
+  text-decoration:none;
+  padding:6px 8px;
+  border-radius:6px;
+}
+.nav a:hover{ background:#f1f5f9; }
+
+/* ======================
+   General Hero
+====================== */
 .hero{
   position:relative;
   overflow:hidden;
@@ -54,48 +85,69 @@ h1{
   height:320px;
   object-fit:cover;
   filter:saturate(1.05) contrast(1.02);
-  display:block;
 }
 .hero-text{
   position:absolute;
-  inset:auto 0 22px 0;
+  left:0; right:0; bottom:22px;
   text-align:center;
   color:#fff;
   text-shadow:0 2px 12px rgba(0,0,0,.35);
   padding:0 16px;
 }
-.hero-text h2{margin:.2rem 0;font-size:clamp(1.25rem, 3.8vw, 2rem)}
-.hero-text p{margin:.2rem 0 .6rem 0; font-size:clamp(.9rem, 2.5vw, 1rem)}
+.hero-text h2{ margin:.2rem 0; font-size:clamp(1.25rem, 3.8vw, 2rem); }
+.hero-text p{  margin:.2rem 0 .6rem 0; font-size:clamp(.9rem, 2.5vw, 1rem); }
 
-/* ---------- Nav ---------- */
-.main-nav{
-  background:#fff;
-  border-bottom:1px solid var(--line);
+/* ======================
+   Listings Page Hero
+====================== */
+.listings-hero{
+  /* overlay + image */
+  background:
+    linear-gradient(180deg, rgba(31,41,55,.85), rgba(17,24,39,.85)),
+    url("/images/hero.jpg") center/cover no-repeat;
+  color:#fff;
+  padding:28px 0 22px;
 }
-.main-nav ul{
-  margin:0; padding:10px 0;
-  list-style:none;
-  display:flex; gap:18px;
-  justify-content:center;
+.listings-hero h1,
+.listings-hero h1 a,
+.listings-hero p{
+  color:#fff !important;
+  text-shadow:0 1px 2px rgba(0,0,0,.45);
+  margin:0;
 }
-.main-nav a{
-  color:var(--ink);
-  text-decoration:none;
-  padding:6px 10px;
-  border-radius:8px;
+.listings-hero h1{
+  font-size:28px;
+  font-weight:800;
+  letter-spacing:.2px;
+  margin-bottom:6px;
 }
-.main-nav a:hover{background:var(--bg-soft);}
+/* ensure generic hero headings stay readable anywhere */
+.hero h1, .hero h1 a{
+  color:#fff !important;
+  text-shadow:0 1px 2px rgba(0,0,0,.45);
+}
+.listings-hero p, .hero p{
+  color:#fff !important;
+  opacity:.92;
+  text-shadow:0 1px 2px rgba(0,0,0,.45);
+  margin:4px 0 0 0;
+}
 
-/* ---------- Main ---------- */
-main.container{padding:28px 0;}
-h2{margin:0 0 6px 0; font-size:1.4rem}
-p{color:var(--muted);}
+/* ======================
+   Main
+====================== */
+main.container{ padding:28px 0; }
+h1{ font-size:1.25rem; margin:0; font-weight:700; color:var(--brand); }
+h2{ margin:0 0 6px 0; font-size:1.4rem; }
+p{ color:var(--muted); }
 
-/* ---------- Cards (ใช้ใน listings.html) ---------- */
+/* ======================
+   Cards / Grid (Listings)
+====================== */
 .grid{
   display:grid;
   gap:16px;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));
 }
 .card{
   border:1px solid var(--line);
@@ -104,18 +156,23 @@ p{color:var(--muted);}
   padding:14px;
   transition:box-shadow .15s ease, transform .1s ease;
 }
-.card:hover{box-shadow:0 6px 18px rgba(23,33,60,.08); transform:translateY(-1px);}
-.card h3{margin:.2rem 0 .4rem 0; font-size:1.05rem}
-.badge{
-  font-size:.72rem;
-  padding:4px 8px;
-  border-radius:999px;
-  border:1px solid var(--line);
-  background:#f8fafc;
-  color:#111827;
+.card:hover{ box-shadow:0 6px 18px rgba(23,33,60,.08); transform:translateY(-1px); }
+.card h3{ margin:.2rem 0 .4rem 0; font-size:1.05rem; }
+
+/* Prevent any 'logo' image from appearing huge inside listings/cards */
+.listings .logo,
+.listings img[src*="logo"],
+.listings img[alt*="logo"]{
+  max-height:48px;
+  width:auto;
 }
 
-/* ---------- Buttons ---------- */
+/* generic images inside cards */
+.card img{ border-radius:8px; margin-top:10px; }
+
+/* ======================
+   Buttons
+====================== */
 .btn{
   display:inline-block;
   padding:9px 14px;
@@ -126,13 +183,13 @@ p{color:var(--muted);}
   font-weight:600;
   transition:background .15s ease, transform .05s ease;
 }
-.btn:hover{background:var(--brand-2);}
-.btn:active{transform:translateY(1px);}
+.btn:hover{ background:var(--brand-2); }
+.btn:active{ transform:translateY(1px); }
 
-/* ---------- Forms (contact) ---------- */
-.form{
-  display:grid; gap:12px; max-width:640px;
-}
+/* ======================
+   Forms (Contact)
+====================== */
+.form{ display:grid; gap:12px; max-width:640px; }
 .input, textarea{
   width:100%;
   border:1px solid var(--line);
@@ -141,211 +198,74 @@ p{color:var(--muted);}
   font:inherit;
   background:#fff;
 }
-textarea{min-height:140px; resize:vertical;}
+textarea{ min-height:140px; resize:vertical; }
 .input:focus, textarea:focus{
   outline:none; border-color:var(--brand);
   box-shadow:0 0 0 3px rgba(47,99,199,.12);
 }
 
-/* ---------- Footer ---------- */
+/* Contact page header band and contact chips */
+.contact-hero{
+  background:linear-gradient(180deg, #4b5563, #1f2937);
+  color:#fff; padding:28px 0 22px;
+}
+.contact-hero h1{ margin:0; font-size:28px; font-weight:700; }
+
+.contact-cards{
+  display:grid;
+  grid-template-columns:repeat(4, minmax(0,1fr));
+  gap:10px; margin:12px 0 18px;
+}
+.contact-card{
+  background:#2563eb; color:#fff; border-radius:8px;
+  padding:10px 12px; text-align:center; font-weight:600;
+  text-decoration:none; box-shadow:0 1px 0 rgba(0,0,0,.04);
+}
+.contact-card:hover{ filter:brightness(1.05); }
+
+.contact-wrap{
+  background:#fff; border:1px solid #e5e7eb; border-radius:12px;
+  padding:18px; margin:18px 0 40px;
+}
+
+.form-grid{ display:grid; gap:14px; }
+label{ font-weight:600; color:#0f172a; }
+
+input[type="text"], input[type="email"], textarea{
+  width:100%; font:inherit; padding:10px 12px;
+  border:1px solid #d1d5db; border-radius:8px; background:#fff;
+}
+textarea{ min-height:160px; resize:vertical; }
+
+/* ======================
+   Footer
+====================== */
 footer{
   border-top:1px solid var(--line);
   background:#fff;
   margin-top:32px;
 }
 footer p{
-  text-align:center;
-  margin:0;
-  padding:16px 0;
-  color:var(--muted);
-  font-size:.95rem;
+  text-align:center; margin:0; padding:16px 0;
+  color:var(--muted); font-size:.95rem;
 }
 
-/* ---------- Utilities ---------- */
-.row{display:flex; gap:10px; flex-wrap:wrap;}
-.space-between{display:flex; justify-content:space-between; align-items:center; gap:10px;}
-.m-0{margin:0}
-.mt-2{margin-top:.5rem}
-.mt-3{margin-top:1rem}
-/* ====== Global reset helpers ====== */
-* { box-sizing: border-box; }
-img { max-width: 100%; height: auto; }
+/* ======================
+   Utilities
+====================== */
+.row{ display:flex; gap:10px; flex-wrap:wrap; }
+.space-between{ display:flex; justify-content:space-between; align-items:center; gap:10px; }
+.m-0{ margin:0; }
+.mt-2{ margin-top:.5rem; }
+.mt-3{ margin-top:1rem; }
 
-/* ====== Layout ====== */
-.container {
-  width: min(1100px, 92%);
-  margin: 0 auto;
+/* ======================
+   Responsive
+====================== */
+@media (max-width: 840px){
+  .contact-cards{ grid-template-columns:repeat(2, minmax(0,1fr)); }
 }
-
-/* ====== Header / Nav ====== */
-.site-header {
-  border-bottom: 1px solid #e9ecef;
-  background: #fff;
-}
-.site-header .inner {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  padding: 14px 0;
-}
-.brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; }
-.brand .logo { height: 44px; width: auto; display: block; }         /* main logo cap */
-.brand .title { font-weight: 700; color: #0f172a; text-decoration: none; }
-
-/* Fallback for places you didn’t add class="logo" */
-header img[src*="logo"], img[alt*="logo"] { max-height: 48px; width: auto; }
-
-/* Nav links */
-.nav {
-  margin-left: auto;
-  display: flex;
-  gap: 16px;
-}
-.nav a {
-  color: #334155;
-  text-decoration: none;
-  padding: 6px 8px;
-  border-radius: 6px;
-}
-.nav a:hover { background: #f1f5f9; }
-/* Align logo and nav links vertically */
-.navbar {
-  display: flex;
-  align-items: center;
-}
-
-.navbar img.logo {
-  height: 40px;  /* adjust logo size */
-  margin-right: 10px;
-}
-
-.navbar ul {
-  display: flex;
-  align-items: center;
-  margin: 0;
-  padding: 0;
-}
-
-.navbar ul li {
-  list-style: none;
-  margin-left: 20px;
-}
-
-.navbar ul li a {
-  text-decoration: none;
-  color: #000; /* or your nav link color */
-}
-
-/* ====== Contact page ====== */
-.contact-hero {
-  background: linear-gradient(180deg, #4b5563, #1f2937);
-  color: #fff;
-  padding: 28px 0 22px;
-}
-.contact-hero h1 { margin: 0; font-size: 28px; font-weight: 700; }
-
-.contact-cards {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0,1fr));
-  gap: 10px;
-  margin: 12px 0 18px;
-}
-.contact-card {
-  background: #2563eb;
-  color: #fff;
-  border-radius: 8px;
-  padding: 10px 12px;
-  text-align: center;
-  font-weight: 600;
-  text-decoration: none;
-  box-shadow: 0 1px 0 rgba(0,0,0,.04);
-}
-.contact-card:hover { filter: brightness(1.05); }
-
-.contact-wrap {
-  background: #fff;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  padding: 18px;
-  margin: 18px 0 40px;
-}
-
-.form-grid { display: grid; gap: 14px; }
-label { font-weight: 600; color: #0f172a; }
-
-input[type="text"], input[type="email"], textarea {
-  width: 100%;
-  font: inherit;
-  padding: 10px 12px;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  background: #fff;
-}
-textarea { min-height: 160px; resize: vertical; }
-
-.btn {
-  display: inline-block;
-  border: 0;
-  background: #2563eb;
-  color: #fff;
-  padding: 10px 16px;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: 600;
-}
-.btn:hover { filter: brightness(1.06); }
-
-/* ====== Listings fixes ====== */
-/* If a logo image ever appears inside content by mistake, keep it small */
-.listings .logo, .listings img[src*="logo"], .listings img[alt*="logo"] {
-  max-height: 48px;
-  width: auto;
-}
-
-/* ====== Responsive ====== */
-@media (max-width: 840px) {
-  .contact-cards { grid-template-columns: repeat(2, minmax(0,1fr)); }
-}
-@media (max-width: 520px) {
-  .brand .logo { height: 38px; }
-  .contact-cards { grid-template-columns: 1fr; }
-}
-/* ===== Listings page hero fixes ===== */
-.listings-hero {
-  /* overlay + image (or just overlay if you’re not using an image) */
-  background:
-    linear-gradient(180deg, rgba(31,41,55,.85), rgba(17,24,39,.85)),
-    url("/images/hero.jpg") center / cover no-repeat;
-  color: #fff;
-  padding: 28px 0 22px;
-}
-
-.listings-hero h1,
-.listings-hero h1 a,
-.listings-hero p {
-  color: #fff !important;
-  text-shadow: 0 1px 2px rgba(0,0,0,.45);
-  margin: 0;
-}
-
-.listings-hero h1 {
-  font-size: 28px;
-  font-weight: 800;
-  letter-spacing: .2px;
-  margin-bottom: 6px;
-}
-
-/* in case the page used a plain <h1> without the .listings-hero wrapper,
-   keep it legible anyway */
-.hero h1, .hero h1 a {
-  color: #fff !important;
-  text-shadow: 0 1px 2px rgba(0,0,0,.45);
-}
-/* Make the subheading in the listings hero readable */
-.listings-hero p,
-.hero p {
-  color: #fff !important;
-  opacity: .92;
-  text-shadow: 0 1px 2px rgba(0,0,0,.45);
-  margin: 4px 0 0 0;
+@media (max-width: 520px){
+  .brand .logo{ height:38px; }
+  .contact-cards{ grid-template-columns:1fr; }
 }
