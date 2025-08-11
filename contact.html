@@ -2,73 +2,63 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Contact — Condo Database</title>
-  <link rel="stylesheet" href="/styles.css" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
-  <!-- Header -->
-  <header class="site-header">
-    <div class="container inner">
-      <a href="/" class="brand">
-        <img src="/images/logo.png" alt="Condo Database" class="logo" />
-        <span class="title">Condo Database</span>
-      </a>
-      <nav class="nav">
-        <a href="/listings.html">Listings</a>
-        <a href="/contact.html">Contact</a>
-        <a href="/admin/">Admin</a>
-      </nav>
-    </div>
+  <!-- Header / Nav -->
+  <header>
+    <nav class="navbar">
+      <div class="logo-container">
+        <a href="index.html" aria-label="Condo Database home">
+          <img src="images/logo.png" alt="Condo Database" class="logo">
+        </a>
+      </div>
+      <ul>
+        <li><a href="listings.html">Listings</a></li>
+        <li><a href="contact.html">Contact</a></li>
+        <li><a href="admin/">Admin</a></li>
+      </ul>
+    </nav>
   </header>
 
-  <!-- Hero -->
-  <section class="contact-hero">
+  <!-- Banner -->
+  <section class="hero" style="background:linear-gradient(180deg,rgba(0,0,0,.35),rgba(0,0,0,.35)), url('images/hero.jpg') center/cover no-repeat; color:#fff; padding:28px 20px;">
     <div class="container">
-      <h1>Contact Us</h1>
-      <p style="opacity:.9;margin:.25rem 0 0">LINE, WhatsApp, phone, or email — whatever is easiest for you.</p>
+      <h1 style="margin:0 0 6px 0;">Contact Us</h1>
+      <p style="margin:0; opacity:.95;">LINE, WhatsApp, phone, or email — whatever is easiest for you.</p>
     </div>
   </section>
 
-  <!-- Quick contact buttons -->
-  <div class="container">
-    <div class="contact-cards">
-      <a class="contact-card" href="https://line.me/R/ti/p/@vry5685n" target="_blank" rel="noopener">LINE: @vry5685n</a>
-      <a class="contact-card" href="https://wa.me/66882553324" target="_blank" rel="noopener">WhatsApp: +66 88 255 3324</a>
-      <a class="contact-card" href="tel:+66882553324">Call: 088-255-3324</a>
-      <a class="contact-card" href="mailto:info@condo-database.com">info@condo-database.com</a>
+  <!-- Contact methods + form -->
+  <main class="container" style="padding:24px 20px;">
+    <div style="display:flex; flex-wrap:wrap; gap:10px; margin-bottom:16px;">
+      <a class="btn" href="https://line.me/R/ti/p/@vry5685n" target="_blank" rel="noopener">LINE: @vry5685n</a>
+      <a class="btn" href="https://wa.me/66828553324" target="_blank" rel="noopener">WhatsApp: +66 82 855 3324</a>
+      <a class="btn" href="tel:+66882553324">Call: 088-255-3324</a>
+      <a class="btn" href="mailto:info@condo-database.com">info@condo-database.com</a>
     </div>
-  </div>
 
-  <!-- Form -->
-  <div class="container">
-    <div class="contact-wrap">
-      <h2 style="margin:0 0 12px">Quick Enquiry</h2>
-      <form name="contact" method="POST" data-netlify="true" class="form-grid">
-        <input type="hidden" name="form-name" value="contact" />
-        <div>
-          <label for="name">Name</label>
-          <input id="name" name="name" type="text" required />
-        </div>
-        <div>
-          <label for="email">Email</label>
-          <input id="email" name="email" type="email" required />
-        </div>
-        <div>
-          <label for="phone">Phone / LINE ID</label>
-          <input id="phone" name="phone" type="text" />
-        </div>
-        <div>
-          <label for="message">Message</label>
-          <textarea id="message" name="message" required></textarea>
-        </div>
-        <div>
-          <button class="btn" type="submit">Send</button>
-        </div>
-      </form>
-    </div>
-  </div>
+    <form name="contact" method="POST" data-netlify="true">
+      <input type="hidden" name="form-name" value="contact" />
+      <label>Name</label>
+      <input type="text" name="name" required>
+      <label>Email</label>
+      <input type="email" name="email" required>
+      <label>Phone / LINE ID</label>
+      <input type="text" name="phone" />
+      <label>Message</label>
+      <textarea name="message" rows="6" required></textarea>
+      <button class="btn" type="submit">Send</button>
+    </form>
+  </main>
+
+  <footer class="container" style="padding:40px 20px; color:#555;">
+    <strong>Condo Database</strong><br>
+    Bangkok, Thailand
+  </footer>
 
 </body>
 </html>
