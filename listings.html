@@ -1,18 +1,3 @@
-<header class="site-header">
-  <div class="container inner">
-    <a class="brand" href="/">
-      <img class="logo" src="/images/logo.png" alt="Condo Database logo">
-      <span class="title">Condo Database</span>
-    </a>
-
-    <nav class="nav">
-      <a href="/listings.html">Listings</a>
-      <a href="/contact.html">Contact</a>
-      <a href="/admin/">Admin</a>
-    </nav>
-  </div>
-</header>
-
 <!doctype html>
 <html lang="en">
 <head>
@@ -23,15 +8,19 @@
 </head>
 <body>
 
-  <!-- Header / Nav -->
-  <header>
-    <nav class="navbar">
-      <div class="logo-container">
-        <a href="index.html" aria-label="Condo Database home">
-          <img src="images/logo.png" alt="Condo Database" class="logo">
-        </a>
-      </div>
-    </nav>
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container inner">
+      <a class="brand" href="/">
+        <img class="logo" src="images/logo.png" alt="Condo Database logo">
+        <span class="title">Condo Database</span>
+      </a>
+      <nav class="nav">
+        <a href="/listings.html">Listings</a>
+        <a href="/contact.html">Contact</a>
+        <a href="/admin/">Admin</a>
+      </nav>
+    </div>
   </header>
 
   <!-- Banner -->
@@ -47,13 +36,13 @@
     <div id="listings"></div>
   </main>
 
+  <!-- Footer -->
   <footer class="container" style="padding:40px 20px; color:#555;">
     <strong>Condo Database</strong><br>
     Bangkok, Thailand
   </footer>
 
   <script>
-    // Render helper (with "Rented until" note if applicable)
     function cardHTML(d) {
       const rentedNote = (d.availability === 'Rented' && d.rented_until)
         ? `<span style="color:#d00">Rented until ${d.rented_until}</span>`
@@ -69,19 +58,13 @@
         </article>`;
     }
 
-    // Fetch markdown-based listings (Netlify CMS output)
-    // Each file in /content/listings should have frontmatter with the fields we’ve been using.
     async function loadListings() {
       const container = document.getElementById('listings');
       try {
-        // Index: fetch directory list via GitHub Pages style is non-trivial.
-        // Simplest: maintain a small JSON manifest OR list files explicitly.
-        // For now we will fetch two example files if present:
         const files = [
           'content/listings/example-2bed-asoke.json',
           'content/listings/example-1bed-thonglo.json'
         ];
-
         const items = [];
         for (const path of files) {
           try {
@@ -97,7 +80,6 @@
           container.innerHTML = `<p>No listings yet. Add some in the CMS (Admin) and redeploy.</p>`;
           return;
         }
-
         container.innerHTML = items.map(cardHTML).join('');
       } catch (e) {
         container.innerHTML = `<p>Could not load listings.</p>`;
