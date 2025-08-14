@@ -4,29 +4,29 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Content Manager</title>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/netlify-cms@^2.0.0/dist/netlify-cms.css" />
+
+  <!-- Decap CMS styles (successor to Netlify CMS) -->
+  <link rel="stylesheet" href="https://unpkg.com/decap-cms@^3/dist/decap-cms.css" />
 </head>
 <body>
-  <!-- Netlify Identity -->
+  <!-- Netlify Identity must load so Git Gateway auth works -->
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 
-  <!-- Netlify CMS -->
-  <script src="https://cdn.jsdelivr.net/npm/netlify-cms@^2.0.0/dist/netlify-cms.js"></script>
+  <!-- Decap CMS runtime (provides global `CMS`) -->
+  <script src="https://unpkg.com/decap-cms@^3/dist/decap-cms.js"></script>
 
   <script>
-    // Redirect after login/logout
+    // Smooth auth redirects
     if (window.netlifyIdentity) {
-      window.netlifyIdentity.on('login', () => document.location.href = '/admin/');
-      window.netlifyIdentity.on('logout', () => document.location.href = '/');
+      window.netlifyIdentity.on('login',  () => location.replace('/admin/'));
+      window.netlifyIdentity.on('logout', () => location.replace('/'));
     }
 
-    // Inline CMS configuration
+    // INLINE CONFIG: avoids any /admin/config.yml fetch (no CORB/CORS)
     CMS.init({
       config: {
-        backend: {
-          name: 'git-gateway',
-          branch: 'main'
-        },
+        backend: { name: 'git-gateway', branch: 'main' },
+        site_url: 'https://condo-database.com',
         media_folder: 'images/uploads',
         public_folder: '/images/uploads',
         collections: [
@@ -39,9 +39,9 @@
             summary: '{{title}} — {{location}} — ฿{{price}} — {{availability}}',
             fields: [
               { label: 'Title', name: 'title', widget: 'string' },
-              { label: 'Availability', name: 'availability', widget: 'select', options: ['Available', 'Rented', 'Sold', 'Reserved'] },
+              { label: 'Availability', name: 'availability', widget: 'select', options: ['Available','Rented','Sold','Reserved'] },
               { label: 'Rented until', name: 'rented_until', widget: 'date', format: 'YYYY-MM-DD', required: false },
-              { label: 'Status', name: 'status', widget: 'select', options: ['Rent', 'Sale'] },
+              { label: 'Status', name: 'status', widget: 'select', options: ['Rent','Sale'] },
               { label: 'Project', name: 'project', widget: 'string' },
               { label: 'Location', name: 'location', widget: 'string', default: 'Bangkok' },
               { label: 'Price (THB)', name: 'price', widget: 'number', value_type: 'int', min: 0, step: 1000 },
