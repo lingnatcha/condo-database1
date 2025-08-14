@@ -8,6 +8,26 @@ media_folder: "images/uploads"
 public_folder: "/images/uploads"
 
 collections:
+  # ---------------------------
+  # Owners (private data)
+  # ---------------------------
+  - name: "owners"
+    label: "Owners (private)"
+    folder: "content/owners"
+    create: true
+    slug: "{{name}}"
+    preview_path: false
+    fields:
+      - { label: "Owner name", name: "name", widget: "string" }
+      - { label: "Phone number", name: "phone", widget: "string", required: false }
+      - { label: "LINE ID", name: "line", widget: "string", required: false }
+      - { label: "WhatsApp", name: "whatsapp", widget: "string", required: false }
+      - { label: "Email", name: "email", widget: "string", required: false }
+      - { label: "Notes (internal)", name: "notes", widget: "text", required: false }
+
+  # ---------------------------
+  # Listings
+  # ---------------------------
   - name: "listings"
     label: "Listings"
     folder: "content/listings"
@@ -16,21 +36,45 @@ collections:
     summary: "{{title}} — {{location}} — ฿{{price}} — {{availability}}"
     fields:
       - { label: "Title", name: "title", widget: "string" }
-      - { label: "Availability", name: "availability", widget: "select", options: ["Available", "Rented", "Sold", "Reserved"] }
+
+      - { label: "Availability", name: "availability", widget: "select",
+          options: ["Available", "Rented", "Sold", "Reserved"] }
+
+      # Fixes the 'No control for widget "date"' by using the datetime widget with date-only UI
       - label: "Rented until"
         name: "rented_until"
-        widget: "date"
-        format: "YYYY-MM-DD"
+        widget: "datetime"
+        date_format: "YYYY-MM-DD"
+        time_format: false
         required: false
+
       - { label: "Status", name: "status", widget: "select", options: ["Rent", "Sale"] }
       - { label: "Project", name: "project", widget: "string" }
       - { label: "Location", name: "location", widget: "string", default: "Bangkok" }
+      - { label: "Google Maps Link", name: "maps_url", widget: "string", required: false,
+          hint: "Paste the full Google Maps URL (optional)" }
+
+      # Pet-friendly toggle
+      - { label: "Pet friendly", name: "pet_friendly", widget: "boolean", default: false }
+
       - { label: "Price (THB)", name: "price", widget: "number", value_type: "int", min: 0, step: 1000 }
       - { label: "Bedrooms", name: "bedrooms", widget: "number", value_type: "int", min: 0 }
       - { label: "Bathrooms", name: "bathrooms", widget: "number", value_type: "int", min: 0 }
       - { label: "Size (sqm)", name: "size", widget: "number", value_type: "float", min: 0, step: 0.5 }
+
       - label: "Gallery"
         name: "images"
         widget: "list"
         field: { label: "Image", name: "image", widget: "image" }
+
       - { label: "Description", name: "body", widget: "markdown" }
+
+      # Link to an owner (do NOT render publicly unless you want to)
+      - label: "Owner (private)"
+        name: "owner"
+        widget: "relation"
+        collection: "owners"
+        search_fields: ["name", "phone", "email"]
+        value_field: "{{slug}}"
+        display_fields: ["name", "phone"]
+        required: false
