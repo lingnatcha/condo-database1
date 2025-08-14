@@ -32,9 +32,10 @@ collections:
     folder: "content/listings"
     create: true
     slug: "{{slug}}"
-    summary: "{{title}} — {{location}} — ฿{{price}} — {{availability}}"
+    summary: "{{title}} — ID: {{property_id}} — {{location}} — ฿{{price}} — {{availability}}"
     fields:
       - { label: "Title", name: "title", widget: "string" }
+      - { label: "Property ID", name: "property_id", widget: "string", required: false }
       - { label: "Availability", name: "availability", widget: "select", options: ["Available", "Rented", "Sold", "Reserved"] }
 
       # Date picker (date-only)
