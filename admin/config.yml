@@ -1,36 +1,68 @@
-backend:
-  name: git-gateway
-  branch: main # change to master if that's your repo's default
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Content Manager</title>
 
-site_url: https://condo-database.com
+  <!-- IMPORTANT: prevent auto-loading /admin/config.yml -->
+  <script>window.CMS_MANUAL_INIT = true;</script>
 
-media_folder: "images/uploads"
-public_folder: "/images/uploads"
+  <!-- Decap CMS (successor to Netlify CMS) -->
+  <link rel="stylesheet" href="https://unpkg.com/decap-cms@^3/dist/decap-cms.css" />
+</head>
+<body>
+  <!-- Netlify Identity (for Git Gateway auth) -->
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 
-collections:
-  - name: "listings"
-    label: "Listings"
-    folder: "content/listings"
-    create: true
-    slug: "{{slug}}"
-    summary: "{{title}} — {{location}} — ฿{{price}} — {{availability}}"
-    fields:
-      - { label: "Title", name: "title", widget: "string" }
-      - { label: "Availability", name: "availability", widget: "select", options: ["Available", "Rented", "Sold", "Reserved"] }
-      - label: "Rented until"
-        name: "rented_until"
-        widget: "date"
-        format: "YYYY-MM-DD"
-        required: false
-      - { label: "Status", name: "status", widget: "select", options: ["Rent", "Sale"] }
-      - { label: "Project", name: "project", widget: "string" }
-      - { label: "Location", name: "location", widget: "string", default: "Bangkok" }
-      - { label: "Price (THB)", name: "price", widget: "number", value_type: "int", min: 0, step: 1000 }
-      - { label: "Bedrooms", name: "bedrooms", widget: "number", value_type: "int", min: 0 }
-      - { label: "Bathrooms", name: "bathrooms", widget: "number", value_type: "int", min: 0 }
-      - { label: "Size (sqm)", name: "size", widget: "number", value_type: "float", min: 0, step: 0.5 }
-      - label: "Gallery"
-        name: "images"
-        widget: "list"
-        field: { label: "Image", name: "image", widget: "image" }
-      - { label: "Description", name: "body", widget: "markdown" }
+  <!-- Decap runtime -->
+  <script src="https://unpkg.com/decap-cms@^3/dist/decap-cms.js"></script>
+
+  <script>
+    // Smooth auth redirects
+    if (window.netlifyIdentity) {
+      window.netlifyIdentity.on('login',  () => location.replace('/admin/'));
+      window.netlifyIdentity.on('logout', () => location.replace('/'));
+    }
+
+    // INLINE CONFIG (only source of truth now)
+    CMS.init({
+      config: {
+        backend: { name: 'git-gateway', branch: 'main' },
+        site_url: 'https://condo-database.com',
+        media_folder: 'images/uploads',
+        public_folder: '/images/uploads',
+        collections: [
+          {
+            name: 'listings',
+            label: 'Listings',
+            folder: 'content/listings',
+            create: true,
+            slug: '{{slug}}',
+            summary: '{{title}} — {{location}} — ฿{{price}} — {{availability}}',
+            fields: [
+              { label: 'Title', name: 'title', widget: 'string' },
+              { label: 'Availability', name: 'availability', widget: 'select', options: ['Available','Rented','Sold','Reserved'] },
+              { label: 'Rented until', name: 'rented_until', widget: 'date', format: 'YYYY-MM-DD', required: false },
+              { label: 'Status', name: 'status', widget: 'select', options: ['Rent','Sale'] },
+              { label: 'Project', name: 'project', widget: 'string' },
+              { label: 'Location', name: 'location', widget: 'string', default: 'Bangkok' },
+              { label: 'Price (THB)', name: 'price', widget: 'number', value_type: 'int', min: 0, step: 1000 },
+              { label: 'Bedrooms', name: 'bedrooms', widget: 'number', value_type: 'int', min: 0 },
+              { label: 'Bathrooms', name: 'bathrooms', widget: 'number', value_type: 'int', min: 0 },
+              { label: 'Size (sqm)', name: 'size', widget: 'number', value_type: 'float', min: 0, step: 0.5 },
+              {
+                label: 'Gallery',
+                name: 'images',
+                widget: 'list',
+                field: { label: 'Image', name: 'image', widget: 'image' }
+              },
+              { label: 'Description', name: 'body', widget: 'markdown' }
+            ]
+          }
+        ]
+      }
+    });
+  </script>
+</body>
+</html>
