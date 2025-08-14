@@ -5,6 +5,42 @@
   <title>Listings — Condo Database</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="styles.css" />
+  <style>
+    .listing-card{
+      position:relative;border:1px solid #eee;border-radius:12px;padding:16px;margin:14px 0;
+      box-shadow:0 2px 10px rgba(0,0,0,.04);background:#fff;
+    }
+    .id-badge{
+      display:inline-block;background:#eef3ff;color:#2b59c3;border-radius:6px;
+      padding:3px 8px;font-size:.9rem;margin-left:8px;vertical-align:middle;
+    }
+    .image-wrap{ position:relative;border-radius:8px;overflow:hidden;margin-top:10px; }
+    .image-wrap img{ display:block;width:100%;height:auto; }
+    .status-badge{
+      position:absolute;top:8px;right:8px;padding:4px 10px;font-size:.8em;border-radius:999px;
+      color:#fff;font-weight:700;box-shadow:0 2px 8px rgba(0,0,0,.2);
+      background:rgba(108,117,125,.95);backdrop-filter:saturate(1.2) blur(4px);
+    }
+    .status-available{ background:rgba(40,167,69,.95) }
+    .status-rented{ background:rgba(220,53,69,.95) }
+    .status-other{ background:rgba(108,117,125,.95) }
+    .badge-on-card{ top:12px;right:12px }
+    .strike{ text-decoration: line-through; opacity:.7; }
+
+    /* Filters */
+    .controls{ display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:18px 0 8px 0; }
+    .chip{ appearance:none;border:1px solid #ddd;background:#fafafa;border-radius:999px;padding:6px 12px;cursor:pointer;font-size:.95rem; }
+    .chip[aria-pressed="true"]{ background:#eef3ff;border-color:#bcd0ff;color:#234aa9;font-weight:600; }
+    .group{ display:flex;gap:8px;align-items:center; }
+    .field{ display:flex;gap:8px;align-items:center;border:1px solid #ddd;border-radius:10px;padding:6px 10px;background:#fafafa; }
+    .field input{ width:90px; }
+    .muted{ color:#666;font-size:.9rem }
+    .right{ margin-left:auto; display:flex; gap:8px; align-items:center; }
+    select{ border:1px solid #ddd;border-radius:10px;padding:6px 10px;background:#fff; }
+    .btn{ border:1px solid #ddd;border-radius:10px;padding:6px 10px;background:#fff; cursor:pointer; }
+    .btn:active{ transform: translateY(1px); }
+    .copy-btn{ margin-left:8px;font-size:.85rem; }
+  </style>
 </head>
 <body>
 
@@ -31,8 +67,60 @@
     </div>
   </section>
 
+  <!-- Filters + Sort -->
+  <div class="container" style="padding:8px 20px 0 20px;">
+    <div class="controls" id="controls">
+      <div class="group" role="group" aria-label="Filter by status">
+        <button class="chip" data-status="All" aria-pressed="true">All</button>
+        <button class="chip" data-status="Rent" aria-pressed="false">Rent</button>
+        <button class="chip" data-status="Sale" aria-pressed="false">Sale</button>
+        <button class="chip" data-status="Rent & Sale" aria-pressed="false">Rent &amp; Sale</button>
+      </div>
+
+      <label class="field">
+        <input type="checkbox" id="petOnly" />
+        <span>Pet-friendly only</span>
+      </label>
+
+      <label class="field">
+        <span>Bedrooms ≥</span>
+        <input type="number" id="minBeds" min="0" step="1" placeholder="0" />
+      </label>
+
+      <label class="field">
+        <span>Bathrooms ≥</span>
+        <input type="number" id="minBaths" min="0" step="1" placeholder="0" />
+      </label>
+
+      <label class="field">
+        <span>Max rent (฿/mo)</span>
+        <input type="number" id="maxRent" min="0" step="1000" placeholder="e.g. 40000" />
+      </label>
+
+      <label class="field">
+        <span>Max sale (฿)</span>
+        <input type="number" id="maxSale" min="0" step="100000" placeholder="e.g. 8000000" />
+      </label>
+
+      <div class="right">
+        <label class="field">
+          <span>Sort</span>
+          <select id="sortBy">
+            <option value="newest">Newest</option>
+            <option value="priceAsc">Price ↑</option>
+            <option value="priceDesc">Price ↓</option>
+            <option value="sizeAsc">Size ↑</option>
+            <option value="sizeDesc">Size ↓</option>
+          </select>
+        </label>
+        <button class="btn" id="resetBtn">Reset</button>
+        <span class="muted" id="count"></span>
+      </div>
+    </div>
+  </div>
+
   <!-- Listings -->
-  <main class="container" style="padding:24px 20px;">
+  <main class="container" style="padding:16px 20px 24px 20px;">
     <div id="listings"></div>
   </main>
 
@@ -43,110 +131,287 @@
   </footer>
 
   <script>
-    // --- helpers -------------------------------------------------------------
-    function firstImage(images) {
-      if (!images || !images.length) return '';
+    // ------- helpers ---------------------------------------------------------
+    function firstImage(images){
+      if(!images || !images.length) return '';
       const first = images[0];
-      // Support both ["url"] and [{ image: "url" }]
-      if (typeof first === 'string') return first;
-      if (first && typeof first === 'object' && (first.image || first.src)) {
+      if(typeof first === 'string') return first;
+      if(first && typeof first === 'object' && (first.image || first.src)){
         return first.image || first.src;
       }
       return '';
     }
-
-    function formatPriceTHB(val) {
-      const n = typeof val === 'number' ? val : Number(String(val).replace(/[, ]/g, ''));
-      if (!Number.isFinite(n)) return '';
-      return n.toLocaleString('en-US');
+    function fmtTHB(val){
+      const n = typeof val === 'number' ? val : Number(String(val ?? '').replace(/[, ]/g,''));
+      return Number.isFinite(n) ? n.toLocaleString('en-US') : '';
     }
-
-    function inquireHref(d) {
+    function parseNum(n){
+      const x = Number(n);
+      return Number.isFinite(x) ? x : null;
+    }
+    function hasRent(status){
+      if(!status) return false;
+      const s = String(status).toLowerCase();
+      return s === 'rent' || s === 'rent & sale';
+    }
+    function hasSale(status){
+      if(!status) return false;
+      const s = String(status).toLowerCase();
+      return s === 'sale' || s === 'rent & sale';
+    }
+    function badgeHTML(availability, extraClass=''){
+      if(!availability) return '';
+      const a = String(availability).toLowerCase();
+      let cls = 'status-other';
+      if(a === 'available') cls = 'status-available';
+      else if(a === 'rented') cls = 'status-rented';
+      return `<span class="status-badge ${cls} ${extraClass}">${availability}</span>`;
+    }
+    function inquireHref(d){
       const ref = d.property_id || d.title || 'listing';
       return `/contact.html?property=${encodeURIComponent(ref)}`;
     }
 
-    function cardHTML(d) {
+    // price display with legacy fallback and strikethrough when rented
+    function priceBlock(d){
+      const rentRaw = d.rent_price ?? (hasRent(d.status) ? d.price : null);
+      const saleRaw = d.sale_price;
+      const rent = parseNum(rentRaw);
+      const sale = parseNum(saleRaw);
+      const rentedNow = String(d.availability || '').toLowerCase() === 'rented';
+      let out = '';
+      if(hasRent(d.status) && rent){
+        out += `<p style="margin:6px 0"><strong>Rent:</strong> <span class="${rentedNow ? 'strike' : ''}">฿${fmtTHB(rent)}/month</span></p>`;
+      }
+      if(hasSale(d.status) && sale){
+        out += `<p style="margin:6px 0"><strong>Sale:</strong> ฿${fmtTHB(sale)}</p>`;
+      }
+      return out;
+    }
+
+    // card
+    async function copyID(id, btn){
+      try{
+        await navigator.clipboard.writeText(id);
+        const old = btn.textContent;
+        btn.textContent = 'Copied!';
+        setTimeout(()=>btn.textContent = old, 1200);
+      }catch(e){}
+    }
+    function cardHTML(d){
       const img = firstImage(d.images);
-      const price = formatPriceTHB(d.price);
-      const rentedNote =
-        d.availability === 'Rented' && d.rented_until
+      const statusAvailability =
+        String(d.availability || '').toLowerCase() === 'rented' && d.rented_until
           ? `<span style="color:#d00">Rented until ${d.rented_until}</span>`
           : (d.availability || '');
-
       const petText =
         d.pet_friendly === true ? 'Yes 🐾'
         : d.pet_friendly === false ? 'No'
-        : ''; // hide line if not set
-
+        : '';
       const mapsLink = d.maps_url
         ? `<p style="margin:6px 0">
              <a href="${d.maps_url}" target="_blank" rel="noopener noreferrer">
                View on Google Maps →
              </a>
-           </p>`
-        : '';
-
-      const idBadge = d.property_id
-        ? `<span style="display:inline-block;background:#eef3ff;color:#2b59c3;border-radius:6px;padding:3px 8px;font-size:.9rem;margin-left:8px;">
-             ID: ${d.property_id}
-           </span>`
-        : '';
-
+           </p>` : '';
+      const idBadge = d.property_id ? `<span class="id-badge">ID: ${d.property_id}</span>` : '';
       const inquire = `<a href="${inquireHref(d)}" style="text-decoration:underline;">Inquire about this listing →</a>`;
+      const copyBtn = d.property_id ? `<button class="btn copy-btn" onclick="copyID('${String(d.property_id).replace(/'/g, "\\'")}', this)">Copy ID</button>` : '';
 
       return `
-        <article style="border:1px solid #eee;border-radius:12px;padding:16px;margin:14px 0;box-shadow:0 2px 10px rgba(0,0,0,.04);">
-          <h3 style="margin:0 0 10px 0">${d.title || 'Listing'} ${idBadge}</h3>
+        <article class="listing-card">
+          ${!img ? badgeHTML(d.availability, 'badge-on-card') : ''}
+          <h3 style="margin:0 0 10px 0">${d.title || 'Listing'} ${idBadge} ${copyBtn}</h3>
           ${d.location ? `<p style="margin:6px 0"><strong>Location:</strong> ${d.location}</p>` : ''}
-          ${price ? `<p style="margin:6px 0"><strong>Price:</strong> ${price} THB</p>` : ''}
+          ${priceBlock(d)}
           ${d.size ? `<p style="margin:6px 0"><strong>Size:</strong> ${d.size} sqm</p>` : ''}
           ${d.bedrooms != null ? `<p style="margin:6px 0"><strong>Bedrooms:</strong> ${d.bedrooms}</p>` : ''}
           ${d.bathrooms != null ? `<p style="margin:6px 0"><strong>Bathrooms:</strong> ${d.bathrooms}</p>` : ''}
           ${petText ? `<p style="margin:6px 0"><strong>Pet friendly:</strong> ${petText}</p>` : ''}
-          <p style="margin:6px 0"><strong>Status:</strong> ${rentedNote}</p>
+          <p style="margin:6px 0"><strong>Status:</strong> ${statusAvailability} ${d.status ? `· ${d.status}` : ''}</p>
           ${mapsLink}
-          ${img ? `<img src="${img}" alt="${d.title || 'Listing'}" style="max-width:100%;border-radius:8px;margin-top:10px">` : ''}
-
+          ${img ? `<div class="image-wrap">${badgeHTML(d.availability)}<img src="${img}" alt="${d.title || 'Listing'}"></div>` : ''}
           <div style="margin-top:12px">${inquire}</div>
         </article>`;
     }
 
-    // --- data loading (replace with your real list when ready) --------------
-    async function loadListings() {
-      const container = document.getElementById('listings');
-      try {
-        const files = [
-          'content/listings/example-2bed-asoke.json',
-          'content/listings/example-1bed-thonglo.json'
-        ];
-        const items = [];
-        for (const path of files) {
-          try {
-            const res = await fetch(path);
-            if (res.ok) {
-              const data = await res.json();
-              items.push(data);
-            }
-          } catch (e) {}
-        }
+    // ------- state, URL sync, filtering & sorting ---------------------------
+    let ALL_ITEMS = [];
+    const els = {
+      buttons: () => Array.from(document.querySelectorAll('.chip[data-status]')),
+      petOnly: () => document.getElementById('petOnly'),
+      minBeds: () => document.getElementById('minBeds'),
+      minBaths: () => document.getElementById('minBaths'),
+      maxRent: () => document.getElementById('maxRent'),
+      maxSale: () => document.getElementById('maxSale'),
+      sortBy:  () => document.getElementById('sortBy'),
+      count:   () => document.getElementById('count'),
+      list:    () => document.getElementById('listings'),
+      reset:   () => document.getElementById('resetBtn'),
+    };
 
-        if (!items.length) {
-          container.innerHTML = `<p>No listings yet. Add some in the CMS (Admin) and redeploy.</p>`;
-          return;
-        }
-
-        // Optional: sort available first
-        items.sort((a, b) => {
-          const rank = v => (v.availability === 'Available' ? 0 : 1);
-          return rank(a) - rank(b);
-        });
-
-        container.innerHTML = items.map(cardHTML).join('');
-      } catch (e) {
-        container.innerHTML = `<p>Could not load listings.</p>`;
-      }
+    function getParams(){
+      const q = new URLSearchParams(location.search);
+      return {
+        status: q.get('status') || 'All',
+        pet: q.get('pet') === '1',
+        beds: parseInt(q.get('beds') || '0', 10) || 0,
+        baths: parseInt(q.get('baths') || '0', 10) || 0,
+        maxRent: parseInt(q.get('maxRent') || '', 10) || null,
+        maxSale: parseInt(q.get('maxSale') || '', 10) || null,
+        sort: q.get('sort') || 'newest',
+      };
     }
+
+    function setParams(state){
+      const q = new URLSearchParams();
+      if(state.status && state.status !== 'All') q.set('status', state.status);
+      if(state.pet) q.set('pet', '1');
+      if(state.beds) q.set('beds', String(state.beds));
+      if(state.baths) q.set('baths', String(state.baths));
+      if(state.maxRent != null) q.set('maxRent', String(state.maxRent));
+      if(state.maxSale != null) q.set('maxSale', String(state.maxSale));
+      if(state.sort && state.sort !== 'newest') q.set('sort', state.sort);
+      const qs = q.toString();
+      history.replaceState(null, '', qs ? `?${qs}` : location.pathname);
+    }
+
+    function applyUIFromParams(p){
+      // status chips
+      els.buttons().forEach(b=>{
+        const st = b.getAttribute('data-status');
+        b.setAttribute('aria-pressed', String(st === p.status));
+      });
+      els.petOnly().checked = !!p.pet;
+      els.minBeds().value = p.beds || '';
+      els.minBaths().value = p.baths || '';
+      els.maxRent().value = p.maxRent ?? '';
+      els.maxSale().value = p.maxSale ?? '';
+      els.sortBy().value = p.sort || 'newest';
+    }
+
+    function currentState(){
+      const activeBtn = els.buttons().find(b => b.getAttribute('aria-pressed') === 'true');
+      return {
+        status: activeBtn ? activeBtn.getAttribute('data-status') : 'All',
+        pet: els.petOnly().checked,
+        beds: parseInt(els.minBeds().value || '0', 10) || 0,
+        baths: parseInt(els.minBaths().value || '0', 10) || 0,
+        maxRent: els.maxRent().value ? parseInt(els.maxRent().value, 10) : null,
+        maxSale: els.maxSale().value ? parseInt(els.maxSale().value, 10) : null,
+        sort: els.sortBy().value || 'newest',
+      };
+    }
+
+    function applyFiltersAndRender(){
+      const s = currentState();
+      setParams(s);
+
+      let filtered = ALL_ITEMS.filter(d=>{
+        // status
+        const statusMatch = s.status === 'All' ? true : String(d.status || '').toLowerCase() === s.status.toLowerCase();
+        if(!statusMatch) return false;
+        // pet
+        if(s.pet && d.pet_friendly !== true) return false;
+        // beds / baths
+        if(s.beds && !Number.isFinite(+d.bedrooms || 0) ? true : (+d.bedrooms || 0) < s.beds) return false;
+        if(s.baths && !Number.isFinite(+d.bathrooms || 0) ? true : (+d.bathrooms || 0) < s.baths) return false;
+        // prices
+        const rentVal = d.rent_price ?? (hasRent(d.status) ? d.price : null);
+        const saleVal = d.sale_price;
+        if(s.maxRent != null && hasRent(d.status)){
+          const r = parseNum(rentVal);
+          if(!(r != null && r <= s.maxRent)) return false;
+        }
+        if(s.maxSale != null && hasSale(d.status)){
+          const sv = parseNum(saleVal);
+          if(!(sv != null && sv <= s.maxSale)) return false;
+        }
+        return true;
+      });
+
+      // sort
+      const sort = s.sort;
+      filtered.sort((a,b)=>{
+        const rentA = parseNum(a.rent_price ?? (hasRent(a.status) ? a.price : null));
+        const rentB = parseNum(b.rent_price ?? (hasRent(b.status) ? b.price : null));
+        const saleA = parseNum(a.sale_price);
+        const saleB = parseNum(b.sale_price);
+        const sizeA = parseNum(a.size) ?? 0;
+        const sizeB = parseNum(b.size) ?? 0;
+        const dateA = a.date ? Date.parse(a.date) : 0;
+        const dateB = b.date ? Date.parse(b.date) : 0;
+
+        if(sort === 'priceAsc'){
+          const aVal = (hasRent(a.status) && rentA != null) ? rentA : (hasSale(a.status) && saleA != null ? saleA : Infinity);
+          const bVal = (hasRent(b.status) && rentB != null) ? rentB : (hasSale(b.status) && saleB != null ? saleB : Infinity);
+          return aVal - bVal;
+        }
+        if(sort === 'priceDesc'){
+          const aVal = (hasRent(a.status) && rentA != null) ? rentA : (hasSale(a.status) && saleA != null ? saleA : -Infinity);
+          const bVal = (hasRent(b.status) && rentB != null) ? rentB : (hasSale(b.status) && saleB != null ? saleB : -Infinity);
+          return bVal - aVal;
+        }
+        if(sort === 'sizeAsc'){ return sizeA - sizeB; }
+        if(sort === 'sizeDesc'){ return sizeB - sizeA; }
+        // newest (date desc). If no date, keep relative order.
+        return (dateB - dateA);
+      });
+
+      // Available first (stable-ish)
+      filtered.sort((a,b)=>{
+        const rank = v => (String(v.availability || '').toLowerCase() === 'available' ? 0 : 1);
+        return rank(a) - rank(b);
+      });
+
+      els.list().innerHTML = filtered.map(cardHTML).join('') || `<p>No matching listings.</p>`;
+      els.count().textContent = `${filtered.length} result${filtered.length===1?'':'s'}`;
+    }
+
+    function initUI(){
+      // status chips
+      els.buttons().forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          els.buttons().forEach(b=>b.setAttribute('aria-pressed','false'));
+          btn.setAttribute('aria-pressed','true');
+          applyFiltersAndRender();
+        });
+      });
+      // other inputs
+      [els.petOnly(), els.minBeds(), els.minBaths(), els.maxRent(), els.maxSale(), els.sortBy()].forEach(el=>{
+        el.addEventListener('change', applyFiltersAndRender);
+        if(el.tagName === 'INPUT') el.addEventListener('input', ()=>{ /* live typing ok */ });
+      });
+      // reset
+      els.reset().addEventListener('click', ()=>{
+        const defaults = {status:'All',pet:false,beds:0,baths:0,maxRent:null,maxSale:null,sort:'newest'};
+        applyUIFromParams(defaults);
+        setParams(defaults);
+        applyFiltersAndRender();
+      });
+    }
+
+    // ------- data loading (demo) --------------------------------------------
+    async function loadListings(){
+      const files = [
+        'content/listings/example-2bed-asoke.json',
+        'content/listings/example-1bed-thonglo.json'
+      ];
+      const items = [];
+      for(const path of files){
+        try{
+          const res = await fetch(path);
+          if(res.ok){ items.push(await res.json()); }
+        }catch(e){}
+      }
+      ALL_ITEMS = items;
+      applyFiltersAndRender();
+    }
+
+    // ------- init -----------------------------------------------------------
+    const initial = getParams();
+    initUI();
+    applyUIFromParams(initial);
     loadListings();
   </script>
 </body>
