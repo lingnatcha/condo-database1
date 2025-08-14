@@ -5,6 +5,15 @@
   <title>Contact — Condo Database</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="styles.css" />
+  <style>
+    .readonly {
+      background: #f7f7f7;
+      color: #333;
+    }
+    .row { display:flex; gap:12px; flex-wrap:wrap; }
+    .row > div { flex:1 1 260px; min-width:260px; }
+    .hint { color:#666; font-size:.9rem; margin:-6px 0 10px; }
+  </style>
 </head>
 <body>
 
@@ -17,7 +26,7 @@
       </a>
       <nav class="nav">
         <a href="/listings.html">Listings</a>
-        <a href="/contact.html">Contact</a>
+        <a href="/contact.html" aria-current="page">Contact</a>
         <a href="/admin/">Admin</a>
       </nav>
     </div>
@@ -40,16 +49,50 @@
       <a class="btn" href="mailto:info@condo-database.com">info@condo-database.com</a>
     </div>
 
-    <form name="contact" method="POST" data-netlify="true">
+    <!-- Netlify form -->
+    <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field">
       <input type="hidden" name="form-name" value="contact" />
-      <label>Name</label>
-      <input type="text" name="name" required>
-      <label>Email</label>
-      <input type="email" name="email" required>
-      <label>Phone / LINE ID</label>
-      <input type="text" name="phone">
+      <!-- Spam honeypot -->
+      <p style="display:none;">
+        <label>Don’t fill this out if you’re human: <input name="bot-field" /></label>
+      </p>
+
+      <!-- Auto-filled from ?property=... -->
+      <div class="row">
+        <div>
+          <label>Property (auto-filled)</label>
+          <input type="text" id="propertyDisplay" class="readonly" readonly placeholder="(optional)" />
+          <div class="hint">If you’re asking about a specific listing, this will be pre-filled.</div>
+          <!-- Hidden copy actually submitted -->
+          <input type="hidden" name="property" id="propertyHidden" />
+        </div>
+        <div>
+          <label>Page URL</label>
+          <input type="text" id="pageUrl" name="page_url" class="readonly" readonly />
+        </div>
+      </div>
+
+      <div class="row">
+        <div>
+          <label>Name</label>
+          <input type="text" name="name" required>
+        </div>
+        <div>
+          <label>Email</label>
+          <input type="email" name="email" required>
+        </div>
+      </div>
+
+      <div class="row">
+        <div>
+          <label>Phone / LINE ID</label>
+          <input type="text" name="phone">
+        </div>
+      </div>
+
       <label>Message</label>
-      <textarea name="message" rows="6" required></textarea>
+      <textarea name="message" id="message" rows="6" required></textarea>
+
       <button class="btn" type="submit">Send</button>
     </form>
   </main>
@@ -60,5 +103,26 @@
     Bangkok, Thailand
   </footer>
 
+  <script>
+    // Auto-fill "Property" from ?property=... and capture page URL
+    (function(){
+      const params = new URLSearchParams(location.search);
+      const prop = params.get('property') || '';
+      const display = document.getElementById('propertyDisplay');
+      const hidden = document.getElementById('propertyHidden');
+      const pageUrl = document.getElementById('pageUrl');
+      const msg = document.getElementById('message');
+
+      if (prop) {
+        display.value = prop;
+        hidden.value = prop;
+        // If message is empty, help user by pre-filling a line with the property
+        if (!msg.value.trim()) {
+          msg.value = `I'm interested in property: ${prop}\n\n`;
+        }
+      }
+      pageUrl.value = location.href;
+    })();
+  </script>
 </body>
 </html>
