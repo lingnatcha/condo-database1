@@ -7,22 +7,59 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/netlify-cms@^2.0.0/dist/netlify-cms.css" />
 </head>
 <body>
-  <!-- Identity must load before CMS -->
+  <!-- Netlify Identity -->
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 
   <!-- Netlify CMS -->
   <script src="https://cdn.jsdelivr.net/npm/netlify-cms@^2.0.0/dist/netlify-cms.js"></script>
 
-  <!-- Force CMS to use the correct config path -->
   <script>
+    // Redirect after login/logout
     if (window.netlifyIdentity) {
-      window.netlifyIdentity.on('login', () => location.href = '/admin/');
-      window.netlifyIdentity.on('logout', () => location.href = '/');
+      window.netlifyIdentity.on('login', () => document.location.href = '/admin/');
+      window.netlifyIdentity.on('logout', () => document.location.href = '/');
     }
-    // Explicitly load the config file from /admin/config.yml
-    if (window.CMS) {
-      CMS.init({ config: '/admin/config.yml' });
-    }
+
+    // Inline CMS configuration
+    CMS.init({
+      config: {
+        backend: {
+          name: 'git-gateway',
+          branch: 'main'
+        },
+        media_folder: 'images/uploads',
+        public_folder: '/images/uploads',
+        collections: [
+          {
+            name: 'listings',
+            label: 'Listings',
+            folder: 'content/listings',
+            create: true,
+            slug: '{{slug}}',
+            summary: '{{title}} — {{location}} — ฿{{price}} — {{availability}}',
+            fields: [
+              { label: 'Title', name: 'title', widget: 'string' },
+              { label: 'Availability', name: 'availability', widget: 'select', options: ['Available', 'Rented', 'Sold', 'Reserved'] },
+              { label: 'Rented until', name: 'rented_until', widget: 'date', format: 'YYYY-MM-DD', required: false },
+              { label: 'Status', name: 'status', widget: 'select', options: ['Rent', 'Sale'] },
+              { label: 'Project', name: 'project', widget: 'string' },
+              { label: 'Location', name: 'location', widget: 'string', default: 'Bangkok' },
+              { label: 'Price (THB)', name: 'price', widget: 'number', value_type: 'int', min: 0, step: 1000 },
+              { label: 'Bedrooms', name: 'bedrooms', widget: 'number', value_type: 'int', min: 0 },
+              { label: 'Bathrooms', name: 'bathrooms', widget: 'number', value_type: 'int', min: 0 },
+              { label: 'Size (sqm)', name: 'size', widget: 'number', value_type: 'float', min: 0, step: 0.5 },
+              {
+                label: 'Gallery',
+                name: 'images',
+                widget: 'list',
+                field: { label: 'Image', name: 'image', widget: 'image' }
+              },
+              { label: 'Description', name: 'body', widget: 'markdown' }
+            ]
+          }
+        ]
+      }
+    });
   </script>
 </body>
 </html>
