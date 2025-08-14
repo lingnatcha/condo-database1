@@ -7,7 +7,33 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/netlify-cms@^2.0.0/dist/netlify-cms.css" />
 </head>
 <body>
+  <!-- Netlify Identity must load before Netlify CMS -->
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+
+  <script>
+    // If the widget is available, wire up a smooth auth flow.
+    if (window.netlifyIdentity) {
+      // 1) When the widget initializes, if there's no user, open the login UI.
+      window.netlifyIdentity.on('init', function(user) {
+        if (!user) {
+          // Auto-open the login dialog the first time you hit /admin
+          window.netlifyIdentity.open();
+        }
+      });
+
+      // 2) After login, reload to /admin/ so the CMS app mounts properly.
+      window.netlifyIdentity.on('login', function() {
+        document.location.href = '/admin/';
+      });
+
+      // 3) After logout, send back to homepage (optional).
+      window.netlifyIdentity.on('logout', function() {
+        document.location.href = '/';
+      });
+    }
+  </script>
+
+  <!-- Netlify CMS app -->
   <script src="https://cdn.jsdelivr.net/npm/netlify-cms@^2.0.0/dist/netlify-cms.js"></script>
 </body>
 </html>
