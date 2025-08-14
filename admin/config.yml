@@ -16,7 +16,6 @@ collections:
     folder: "content/owners"
     create: true
     slug: "{{name}}"
-    preview_path: false
     fields:
       - { label: "Owner name", name: "name", widget: "string" }
       - { label: "Phone number", name: "phone", widget: "string", required: false }
@@ -36,11 +35,9 @@ collections:
     summary: "{{title}} — {{location}} — ฿{{price}} — {{availability}}"
     fields:
       - { label: "Title", name: "title", widget: "string" }
+      - { label: "Availability", name: "availability", widget: "select", options: ["Available", "Rented", "Sold", "Reserved"] }
 
-      - { label: "Availability", name: "availability", widget: "select",
-          options: ["Available", "Rented", "Sold", "Reserved"] }
-
-      # Fixes the 'No control for widget "date"' by using the datetime widget with date-only UI
+      # Date picker (date-only)
       - label: "Rented until"
         name: "rented_until"
         widget: "datetime"
@@ -51,10 +48,7 @@ collections:
       - { label: "Status", name: "status", widget: "select", options: ["Rent", "Sale"] }
       - { label: "Project", name: "project", widget: "string" }
       - { label: "Location", name: "location", widget: "string", default: "Bangkok" }
-      - { label: "Google Maps Link", name: "maps_url", widget: "string", required: false,
-          hint: "Paste the full Google Maps URL (optional)" }
-
-      # Pet-friendly toggle
+      - { label: "Google Maps Link", name: "maps_url", widget: "string", required: false, hint: "Paste the full Google Maps URL (optional)" }
       - { label: "Pet friendly", name: "pet_friendly", widget: "boolean", default: false }
 
       - { label: "Price (THB)", name: "price", widget: "number", value_type: "int", min: 0, step: 1000 }
@@ -69,7 +63,7 @@ collections:
 
       - { label: "Description", name: "body", widget: "markdown" }
 
-      # Link to an owner (do NOT render publicly unless you want to)
+      # Link to an owner (private)
       - label: "Owner (private)"
         name: "owner"
         widget: "relation"
