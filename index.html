@@ -8,6 +8,13 @@
 </head>
 <body>
 
+  <!-- Redirect invite links to /admin/ -->
+  <script>
+    if (location.hash && location.hash.includes('invite_token=')) {
+      location.replace('/admin/' + location.hash);
+    }
+  </script>
+
   <!-- Header (single, consistent across the site) -->
   <header class="site-header">
     <div class="container inner">
