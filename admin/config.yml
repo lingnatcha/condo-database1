@@ -4,6 +4,7 @@ backend:
 
 site_url: https://condo-database.com
 
+# Images will be committed to the repo here and served from /images/uploads/…
 media_folder: "images/uploads"
 public_folder: "/images/uploads"
 
@@ -32,13 +33,15 @@ collections:
     folder: "content/listings"
     create: true
     slug: "{{slug}}"
-    summary: "{{title}} — ID: {{property_id}} — {{location}} — ฿{{rent_price}}{{sale_price}} — {{availability}}"
+    summary: "{{title}} — ID: {{property_id}} — {{location}} — Rent ฿{{rent_price}} / Sale ฿{{sale_price}} — {{availability}}"
     fields:
       - { label: "Title", name: "title", widget: "string" }
       - { label: "Property ID", name: "property_id", widget: "string", required: false }
 
-      - { label: "Availability", name: "availability", widget: "select",
-          options: ["Available", "Rented", "Sold", "Reserved"] }
+      - label: "Availability"
+        name: "availability"
+        widget: "select"
+        options: ["Available", "Rented", "Sold", "Reserved"]
 
       - label: "Rented until"
         name: "rented_until"
@@ -47,20 +50,38 @@ collections:
         time_format: false
         required: false
 
-      # NEW: status supports both
-      - { label: "Status", name: "status", widget: "select",
-          options: ["Rent", "Sale", "Rent & Sale"] }
+      # Rent / Sale / Both
+      - label: "Status"
+        name: "status"
+        widget: "select"
+        options: ["Rent", "Sale", "Rent & Sale"]
 
-      # NEW: separate prices
-      - { label: "Rent price (THB/month)", name: "rent_price", widget: "number",
-          value_type: "int", min: 0, step: 1000, required: false }
-      - { label: "Sale price (THB)", name: "sale_price", widget: "number",
-          value_type: "int", min: 0, step: 10000, required: false }
+      # Separate prices
+      - label: "Rent price (THB/month)"
+        name: "rent_price"
+        widget: "number"
+        value_type: "int"
+        min: 0
+        step: 1000
+        required: false
 
-      # Back-compat (optional; you can remove later)
-      - { label: "Price (deprecated)", name: "price", widget: "number",
-          value_type: "int", min: 0, step: 1000, required: false,
-          hint: "Legacy field. Use Rent/Sale price above." }
+      - label: "Sale price (THB)"
+        name: "sale_price"
+        widget: "number"
+        value_type: "int"
+        min: 0
+        step: 10000
+        required: false
+
+      # Legacy (optional)
+      - label: "Price (deprecated)"
+        name: "price"
+        widget: "number"
+        value_type: "int"
+        min: 0
+        step: 1000
+        required: false
+        hint: "Legacy field. Use Rent/Sale price above."
 
       - { label: "Project", name: "project", widget: "string" }
       - { label: "Location", name: "location", widget: "string", default: "Bangkok" }
@@ -70,14 +91,19 @@ collections:
       - { label: "Bedrooms", name: "bedrooms", widget: "number", value_type: "int", min: 0 }
       - { label: "Bathrooms", name: "bathrooms", widget: "number", value_type: "int", min: 0 }
       - { label: "Size (sqm)", name: "size", widget: "number", value_type: "float", min: 0, step: 0.5 }
+      - { label: "Floor", name: "floor", widget: "number", min: 1, required: false }
 
       - label: "Gallery"
         name: "images"
         widget: "list"
-        field: { label: "Image", name: "image", widget: "image" }
+        field:
+          label: "Image"
+          name: "image"
+          widget: "image"
 
       - { label: "Description", name: "body", widget: "markdown" }
 
+      # Link to an owner (private)
       - label: "Owner (private)"
         name: "owner"
         widget: "relation"
