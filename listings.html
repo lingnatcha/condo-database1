@@ -16,7 +16,7 @@
         <span class="title">Condo Database</span>
       </a>
       <nav class="nav">
-        <a href="/listings.html">Listings</a>
+        <a href="/listings.html" aria-current="page">Listings</a>
         <a href="/contact.html">Contact</a>
         <a href="/admin/">Admin</a>
       </nav>
@@ -43,21 +43,61 @@
   </footer>
 
   <script>
+    // --- helpers -------------------------------------------------------------
+    function firstImage(images) {
+      if (!images || !images.length) return '';
+      const first = images[0];
+      // Support both ["url"] and [{ image: "url" }]
+      if (typeof first === 'string') return first;
+      if (first && typeof first === 'object' && (first.image || first.src)) {
+        return first.image || first.src;
+      }
+      return '';
+    }
+
+    function formatPriceTHB(val) {
+      const n = typeof val === 'number' ? val : Number(String(val).replace(/[, ]/g, ''));
+      if (!Number.isFinite(n)) return '';
+      return n.toLocaleString('en-US');
+    }
+
     function cardHTML(d) {
-      const rentedNote = (d.availability === 'Rented' && d.rented_until)
-        ? `<span style="color:#d00">Rented until ${d.rented_until}</span>`
-        : (d.availability || '');
+      const img = firstImage(d.images);
+      const price = formatPriceTHB(d.price);
+      const rentedNote =
+        d.availability === 'Rented' && d.rented_until
+          ? `<span style="color:#d00">Rented until ${d.rented_until}</span>`
+          : (d.availability || '');
+
+      const petText =
+        d.pet_friendly === true ? 'Yes 🐾'
+        : d.pet_friendly === false ? 'No'
+        : ''; // hide line if not set
+
+      const mapsLink = d.maps_url
+        ? `<p style="margin:6px 0">
+             <a href="${d.maps_url}" target="_blank" rel="noopener noreferrer">
+               View on Google Maps →
+             </a>
+           </p>`
+        : '';
 
       return `
         <article style="border:1px solid #eee;border-radius:12px;padding:16px;margin:14px 0;box-shadow:0 2px 10px rgba(0,0,0,.04);">
           <h3 style="margin:0 0 10px 0">${d.title || 'Listing'}</h3>
-          <p style="margin:6px 0"><strong>Price:</strong> ${d.price ? d.price.toLocaleString() : ''} THB/month</p>
-          <p style="margin:6px 0"><strong>Size:</strong> ${d.size || ''} sqm</p>
+          ${d.location ? `<p style="margin:6px 0"><strong>Location:</strong> ${d.location}</p>` : ''}
+          ${price ? `<p style="margin:6px 0"><strong>Price:</strong> ${price} THB</p>` : ''}
+          ${d.size ? `<p style="margin:6px 0"><strong>Size:</strong> ${d.size} sqm</p>` : ''}
+          ${d.bedrooms != null ? `<p style="margin:6px 0"><strong>Bedrooms:</strong> ${d.bedrooms}</p>` : ''}
+          ${d.bathrooms != null ? `<p style="margin:6px 0"><strong>Bathrooms:</strong> ${d.bathrooms}</p>` : ''}
+          ${petText ? `<p style="margin:6px 0"><strong>Pet friendly:</strong> ${petText}</p>` : ''}
           <p style="margin:6px 0"><strong>Status:</strong> ${rentedNote}</p>
-          ${d.images && d.images.length ? `<img src="${d.images[0]}" alt="${d.title || 'Listing'}" style="max-width:100%;border-radius:8px;margin-top:10px">` : ''}
+          ${mapsLink}
+          ${img ? `<img src="${img}" alt="${d.title || 'Listing'}" style="max-width:100%;border-radius:8px;margin-top:10px">` : ''}
         </article>`;
     }
 
+    // --- data loading (replace with your real list when ready) --------------
     async function loadListings() {
       const container = document.getElementById('listings');
       try {
@@ -73,13 +113,20 @@
               const data = await res.json();
               items.push(data);
             }
-          } catch(e){}
+          } catch (e) {}
         }
 
         if (!items.length) {
           container.innerHTML = `<p>No listings yet. Add some in the CMS (Admin) and redeploy.</p>`;
           return;
         }
+
+        // Optional: sort available first
+        items.sort((a, b) => {
+          const rank = v => (v.availability === 'Available' ? 0 : 1);
+          return rank(a) - rank(b);
+        });
+
         container.innerHTML = items.map(cardHTML).join('');
       } catch (e) {
         container.innerHTML = `<p>Could not load listings.</p>`;
