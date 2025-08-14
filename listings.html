@@ -61,6 +61,11 @@
       return n.toLocaleString('en-US');
     }
 
+    function inquireHref(d) {
+      const ref = d.property_id || d.title || 'listing';
+      return `/contact.html?property=${encodeURIComponent(ref)}`;
+    }
+
     function cardHTML(d) {
       const img = firstImage(d.images);
       const price = formatPriceTHB(d.price);
@@ -82,9 +87,17 @@
            </p>`
         : '';
 
+      const idBadge = d.property_id
+        ? `<span style="display:inline-block;background:#eef3ff;color:#2b59c3;border-radius:6px;padding:3px 8px;font-size:.9rem;margin-left:8px;">
+             ID: ${d.property_id}
+           </span>`
+        : '';
+
+      const inquire = `<a href="${inquireHref(d)}" style="text-decoration:underline;">Inquire about this listing →</a>`;
+
       return `
         <article style="border:1px solid #eee;border-radius:12px;padding:16px;margin:14px 0;box-shadow:0 2px 10px rgba(0,0,0,.04);">
-          <h3 style="margin:0 0 10px 0">${d.title || 'Listing'}</h3>
+          <h3 style="margin:0 0 10px 0">${d.title || 'Listing'} ${idBadge}</h3>
           ${d.location ? `<p style="margin:6px 0"><strong>Location:</strong> ${d.location}</p>` : ''}
           ${price ? `<p style="margin:6px 0"><strong>Price:</strong> ${price} THB</p>` : ''}
           ${d.size ? `<p style="margin:6px 0"><strong>Size:</strong> ${d.size} sqm</p>` : ''}
@@ -94,6 +107,8 @@
           <p style="margin:6px 0"><strong>Status:</strong> ${rentedNote}</p>
           ${mapsLink}
           ${img ? `<img src="${img}" alt="${d.title || 'Listing'}" style="max-width:100%;border-radius:8px;margin-top:10px">` : ''}
+
+          <div style="margin-top:12px">${inquire}</div>
         </article>`;
     }
 
