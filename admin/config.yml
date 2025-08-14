@@ -32,13 +32,14 @@ collections:
     folder: "content/listings"
     create: true
     slug: "{{slug}}"
-    summary: "{{title}} — ID: {{property_id}} — {{location}} — ฿{{price}} — {{availability}}"
+    summary: "{{title}} — ID: {{property_id}} — {{location}} — ฿{{rent_price}}{{sale_price}} — {{availability}}"
     fields:
       - { label: "Title", name: "title", widget: "string" }
       - { label: "Property ID", name: "property_id", widget: "string", required: false }
-      - { label: "Availability", name: "availability", widget: "select", options: ["Available", "Rented", "Sold", "Reserved"] }
 
-      # Date picker (date-only)
+      - { label: "Availability", name: "availability", widget: "select",
+          options: ["Available", "Rented", "Sold", "Reserved"] }
+
       - label: "Rented until"
         name: "rented_until"
         widget: "datetime"
@@ -46,13 +47,26 @@ collections:
         time_format: false
         required: false
 
-      - { label: "Status", name: "status", widget: "select", options: ["Rent", "Sale"] }
+      # NEW: status supports both
+      - { label: "Status", name: "status", widget: "select",
+          options: ["Rent", "Sale", "Rent & Sale"] }
+
+      # NEW: separate prices
+      - { label: "Rent price (THB/month)", name: "rent_price", widget: "number",
+          value_type: "int", min: 0, step: 1000, required: false }
+      - { label: "Sale price (THB)", name: "sale_price", widget: "number",
+          value_type: "int", min: 0, step: 10000, required: false }
+
+      # Back-compat (optional; you can remove later)
+      - { label: "Price (deprecated)", name: "price", widget: "number",
+          value_type: "int", min: 0, step: 1000, required: false,
+          hint: "Legacy field. Use Rent/Sale price above." }
+
       - { label: "Project", name: "project", widget: "string" }
       - { label: "Location", name: "location", widget: "string", default: "Bangkok" }
       - { label: "Google Maps Link", name: "maps_url", widget: "string", required: false, hint: "Paste the full Google Maps URL (optional)" }
       - { label: "Pet friendly", name: "pet_friendly", widget: "boolean", default: false }
 
-      - { label: "Price (THB)", name: "price", widget: "number", value_type: "int", min: 0, step: 1000 }
       - { label: "Bedrooms", name: "bedrooms", widget: "number", value_type: "int", min: 0 }
       - { label: "Bathrooms", name: "bathrooms", widget: "number", value_type: "int", min: 0 }
       - { label: "Size (sqm)", name: "size", widget: "number", value_type: "float", min: 0, step: 0.5 }
@@ -64,7 +78,6 @@ collections:
 
       - { label: "Description", name: "body", widget: "markdown" }
 
-      # Link to an owner (private)
       - label: "Owner (private)"
         name: "owner"
         widget: "relation"
