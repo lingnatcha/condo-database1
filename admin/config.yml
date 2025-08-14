@@ -1,6 +1,8 @@
 backend:
   name: git-gateway
-  branch: main
+  branch: main # change to master if that's your repo's default
+
+site_url: https://condo-database.com
 
 media_folder: "images/uploads"
 public_folder: "/images/uploads"
