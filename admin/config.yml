@@ -4,11 +4,13 @@ backend:
 
 site_url: https://condo-database.com
 
-# Point the media library to the real repo folder
-media_folder: "images"          # <- matches your GitHub tree
+# Global media location (matches your repo)
+media_folder: "images"
 public_folder: "/images"
+
+# Use the built-in (default) media library
 media_library:
-  folder_support: true          # <- lets you browse subfolders (e.g. /upload/CDB-00246)
+  name: "default"
 
 collections:
   # ---------------------------
@@ -37,9 +39,7 @@ collections:
     slug: "{{slug}}"
     summary: "{{title}} — ID: {{property_id}} — {{location}} — Rent ฿{{rent_price}} / Sale ฿{{sale_price}} — {{availability}}"
 
-    # IMPORTANT: no per-collection media_folder override here.
-    # All images go under /images/... so the media library can see them.
-
+    # No per-collection media overrides — everything uses /images
     fields:
       # Meta
       - { label: "Title", name: "title", widget: "string" }
