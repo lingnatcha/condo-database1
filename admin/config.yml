@@ -4,7 +4,7 @@ backend:
 
 site_url: https://condo-database.com
 
-# Images are stored in the repo (free) and served at /images/uploads/...
+# Default repo media location
 media_folder: "images/uploads"
 public_folder: "/images/uploads"
 
@@ -34,6 +34,11 @@ collections:
     create: true
     slug: "{{slug}}"
     summary: "{{title}} — ID: {{property_id}} — {{location}} — Rent ฿{{rent_price}} / Sale ฿{{sale_price}} — {{availability}}"
+
+    # 🔽 per-listing image subfolder (based on this entry’s slug)
+    media_folder: "images/uploads/listings/{{slug}}"
+    public_folder: "/images/uploads/listings/{{slug}}"
+
     fields:
       # Meta
       - { label: "Title", name: "title", widget: "string" }
@@ -103,7 +108,7 @@ collections:
       - { label: "Size (sqm)", name: "size", widget: "number", value_type: "float", min: 0, step: 0.5 }
       - { label: "Floor", name: "floor", widget: "number", min: 1, required: false }
 
-      # Images
+      # Images (now saved under images/uploads/listings/{{slug}}/)
       - label: "Cover image"
         name: "cover_image"
         widget: "image"
@@ -113,13 +118,9 @@ collections:
       - label: "Gallery"
         name: "images"
         widget: "list"
-        hint: "Tip: upload many at once via GitHub → images/upload, then 'Choose existing' here."
+        hint: "Upload multiple or choose existing. Drag to reorder."
         fields:
-          - label: "Image"
-            name: "image"
-            widget: "image"
-            media_folder: "/images/upload"
-            public_folder: "/images/upload"
+          - { label: "Image", name: "image", widget: "image" }
           - { label: "Caption (optional)", name: "caption", widget: "string", required: false }
           - { label: "Alt text (optional)", name: "alt", widget: "string", required: false }
 
