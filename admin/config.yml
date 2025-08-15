@@ -4,9 +4,12 @@ backend:
 
 site_url: https://condo-database.com
 
-# Point the CMS at your repo's images folder
-media_folder: "images"        # files are committed here
-public_folder: "/images"      # URLs used in your HTML/JSON
+# Point the CMS at your repo's upload folder inside /images
+media_folder: "images/upload"   # files are committed here
+public_folder: "/images/upload" # URLs used in your HTML/JSON
+
+media_library:
+  folder_support: true           # allow subfolder browsing
 
 collections:
   # ---------------------------
@@ -34,7 +37,7 @@ collections:
     create: true
     slug: "{{slug}}"
     summary: "{{title}} — ID: {{property_id}} — {{location}} — Rent ฿{{rent_price}} / Sale ฿{{sale_price}} — {{availability}}"
-    # no per-collection media overrides — everything uses /images
+    # no per-collection media overrides — everything uses /images/upload
 
     fields:
       - { label: "Title", name: "title", widget: "string" }
