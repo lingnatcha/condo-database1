@@ -4,13 +4,9 @@ backend:
 
 site_url: https://condo-database.com
 
-# Global media location (matches your repo)
-media_folder: "images"
-public_folder: "/images"
-
-# Use the built-in (default) media library
-media_library:
-  name: "default"
+# Point the CMS at your repo's images folder
+media_folder: "images"        # files are committed here
+public_folder: "/images"      # URLs used in your HTML/JSON
 
 collections:
   # ---------------------------
@@ -38,10 +34,9 @@ collections:
     create: true
     slug: "{{slug}}"
     summary: "{{title}} — ID: {{property_id}} — {{location}} — Rent ฿{{rent_price}} / Sale ฿{{sale_price}} — {{availability}}"
+    # no per-collection media overrides — everything uses /images
 
-    # No per-collection media overrides — everything uses /images
     fields:
-      # Meta
       - { label: "Title", name: "title", widget: "string" }
       - { label: "Property ID", name: "property_id", widget: "string", required: false, hint: "Use your own code (e.g. REF1234)" }
       - label: "Date"
@@ -49,10 +44,9 @@ collections:
         widget: "datetime"
         date_format: "YYYY-MM-DD"
         time_format: false
-        hint: "Used for 'Newest' sorting on the listings page"
         required: false
+        hint: "Used for 'Newest' sorting on the listings page"
 
-      # Status & availability
       - label: "Availability"
         name: "availability"
         widget: "select"
@@ -72,7 +66,6 @@ collections:
         options: ["Rent", "Sale", "Rent & Sale"]
         default: "Rent"
 
-      # Prices
       - label: "Rent price (THB/month)"
         name: "rent_price"
         widget: "number"
@@ -89,7 +82,6 @@ collections:
         step: 10000
         required: false
 
-      # Legacy (optional)
       - label: "Price (deprecated)"
         name: "price"
         widget: "number"
@@ -99,7 +91,6 @@ collections:
         required: false
         hint: "Legacy field. Use Rent/Sale price above."
 
-      # Property info
       - { label: "Project", name: "project", widget: "string" }
       - { label: "Location", name: "location", widget: "string", default: "Bangkok" }
       - { label: "Google Maps Link", name: "maps_url", widget: "string", required: false, hint: "Paste a full Google Maps URL (optional)" }
@@ -109,7 +100,6 @@ collections:
       - { label: "Size (sqm)", name: "size", widget: "number", value_type: "float", min: 0, step: 0.5 }
       - { label: "Floor", name: "floor", widget: "number", min: 1, required: false }
 
-      # Images
       - label: "Cover image"
         name: "cover_image"
         widget: "image"
@@ -125,10 +115,8 @@ collections:
           - { label: "Caption (optional)", name: "caption", widget: "string", required: false }
           - { label: "Alt text (optional)", name: "alt", widget: "string", required: false }
 
-      # Description
       - { label: "Description", name: "body", widget: "markdown" }
 
-      # Link to an owner (private)
       - label: "Owner (private)"
         name: "owner"
         widget: "relation"
