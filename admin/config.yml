@@ -4,11 +4,11 @@ backend:
 
 site_url: https://condo-database.com
 
-# Show ALL images under /images (and allow browsing subfolders)
-media_folder: "images"
+# Point the media library to the real repo folder
+media_folder: "images"          # <- matches your GitHub tree
 public_folder: "/images"
 media_library:
-  folder_support: true
+  folder_support: true          # <- lets you browse subfolders (e.g. /upload/CDB-00246)
 
 collections:
   # ---------------------------
@@ -37,8 +37,9 @@ collections:
     slug: "{{slug}}"
     summary: "{{title}} — ID: {{property_id}} — {{location}} — Rent ฿{{rent_price}} / Sale ฿{{sale_price}} — {{availability}}"
 
-    # ⛔️ NOTE: no media_folder/public_folder override here,
-    # so the picker sees everything under /images (including upload/CDB-00246)
+    # IMPORTANT: no per-collection media_folder override here.
+    # All images go under /images/... so the media library can see them.
+
     fields:
       # Meta
       - { label: "Title", name: "title", widget: "string" }
