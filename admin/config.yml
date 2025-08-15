@@ -113,9 +113,13 @@ collections:
       - label: "Gallery"
         name: "images"
         widget: "list"
-        hint: "Tip: upload many at once via the Media tab, then 'Choose existing' here. Drag to reorder."
+        hint: "Tip: upload many at once via GitHub → images/upload, then 'Choose existing' here."
         fields:
-          - { label: "Image", name: "image", widget: "image" }
+          - label: "Image"
+            name: "image"
+            widget: "image"
+            media_folder: "/images/upload"
+            public_folder: "/images/upload"
           - { label: "Caption (optional)", name: "caption", widget: "string", required: false }
           - { label: "Alt text (optional)", name: "alt", widget: "string", required: false }
 
