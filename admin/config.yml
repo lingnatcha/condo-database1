@@ -5,8 +5,8 @@ backend:
 site_url: https://condo-database.com
 
 # Default repo media location
-media_folder: "images/uploads"
-public_folder: "/images/uploads"
+media_folder: "images/upload"
+public_folder: "/images/upload"
 
 collections:
   # ---------------------------
