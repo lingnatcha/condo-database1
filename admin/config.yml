@@ -4,17 +4,13 @@ backend:
 
 site_url: https://condo-database.com
 
-# Point the CMS at your repo's upload folder inside /images
-media_folder: "images/upload"   # files are committed here
-public_folder: "/images/upload" # URLs used in your HTML/JSON
+media_folder: "images/upload"
+public_folder: "/images/upload"
 
 media_library:
-  folder_support: true           # allow subfolder browsing
+  folder_support: true
 
 collections:
-  # ---------------------------
-  # Owners (private data)
-  # ---------------------------
   - name: "owners"
     label: "Owners (private)"
     folder: "content/owners"
@@ -28,17 +24,12 @@ collections:
       - { label: "Email", name: "email", widget: "string", required: false }
       - { label: "Notes (internal)", name: "notes", widget: "text", required: false }
 
-  # ---------------------------
-  # Listings
-  # ---------------------------
   - name: "listings"
     label: "Listings"
     folder: "content/listings"
     create: true
     slug: "{{slug}}"
     summary: "{{title}} — ID: {{property_id}} — {{location}} — Rent ฿{{rent_price}} / Sale ฿{{sale_price}} — {{availability}}"
-    # no per-collection media overrides — everything uses /images/upload
-
     fields:
       - { label: "Title", name: "title", widget: "string" }
       - { label: "Property ID", name: "property_id", widget: "string", required: false, hint: "Use your own code (e.g. REF1234)" }
@@ -49,26 +40,22 @@ collections:
         time_format: false
         required: false
         hint: "Used for 'Newest' sorting on the listings page"
-
       - label: "Availability"
         name: "availability"
         widget: "select"
         options: ["Available", "Rented", "Sold", "Reserved"]
         default: "Available"
-
       - label: "Rented until"
         name: "rented_until"
         widget: "datetime"
         date_format: "YYYY-MM-DD"
         time_format: false
         required: false
-
       - label: "Status"
         name: "status"
         widget: "select"
         options: ["Rent", "Sale", "Rent & Sale"]
         default: "Rent"
-
       - label: "Rent price (THB/month)"
         name: "rent_price"
         widget: "number"
@@ -76,7 +63,6 @@ collections:
         min: 0
         step: 1000
         required: false
-
       - label: "Sale price (THB)"
         name: "sale_price"
         widget: "number"
@@ -84,7 +70,6 @@ collections:
         min: 0
         step: 10000
         required: false
-
       - label: "Price (deprecated)"
         name: "price"
         widget: "number"
@@ -93,7 +78,6 @@ collections:
         step: 1000
         required: false
         hint: "Legacy field. Use Rent/Sale price above."
-
       - { label: "Project", name: "project", widget: "string" }
       - { label: "Location", name: "location", widget: "string", default: "Bangkok" }
       - { label: "Google Maps Link", name: "maps_url", widget: "string", required: false, hint: "Paste a full Google Maps URL (optional)" }
@@ -102,13 +86,11 @@ collections:
       - { label: "Bathrooms", name: "bathrooms", widget: "number", value_type: "int", min: 0 }
       - { label: "Size (sqm)", name: "size", widget: "number", value_type: "float", min: 0, step: 0.5 }
       - { label: "Floor", name: "floor", widget: "number", min: 1, required: false }
-
       - label: "Cover image"
         name: "cover_image"
         widget: "image"
         required: false
         hint: "Shown first on the card. You can also reorder the Gallery below."
-
       - label: "Gallery"
         name: "images"
         widget: "list"
@@ -117,9 +99,7 @@ collections:
           - { label: "Image", name: "image", widget: "image" }
           - { label: "Caption (optional)", name: "caption", widget: "string", required: false }
           - { label: "Alt text (optional)", name: "alt", widget: "string", required: false }
-
       - { label: "Description", name: "body", widget: "markdown" }
-
       - label: "Owner (private)"
         name: "owner"
         widget: "relation"
