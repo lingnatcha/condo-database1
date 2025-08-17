@@ -2,20 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Content Manager</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Netlify Identity (for Git Gateway login) -->
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
 </head>
 <body>
-  <!-- Keep Netlify Identity for git-gateway login -->
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-
-  <!-- Decap CMS (community fork of Netlify CMS) -->
-  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
-
-  <!-- Optional: load after page is ready -->
-  <script>
-    // If you ever need to customize CMS (preview templates, etc.), do it here.
-    // window.CMS.init({ config: { backend: { name: 'git-gateway' } } });
-  </script>
+  <!-- Decap CMS v3 -->
+  <script src="https://unpkg.com/decap-cms@^3/dist/decap-cms.js"></script>
 </body>
 </html>
