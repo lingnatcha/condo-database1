@@ -4,9 +4,13 @@ backend:
 
 site_url: https://condo-database.com
 
-# Media settings (global)
+# ใช้โฟลเดอร์เดียวตามนี้ (อย่าใช้ images/uploads/)
 media_folder: "images/upload"
 public_folder: "/images/upload"
+
+# เปิดการท่องโฟลเดอร์ใน Media (Decap v3)
+media_library:
+  folder_support: true
 
 collections:
   - name: "owners"
@@ -27,17 +31,18 @@ collections:
     folder: "content/listings"
     create: true
 
-    # ใช้ Property ID เป็น slug (เช่น content/listings/A815.md)
+    # ใช้ Property ID เป็น slug ของไฟล์ content (เช่น content/listings/CDB-00246.md)
     slug: "{{fields.property_id}}"
 
-    # รูปของแต่ละรายการจะถูกเก็บที่ images/upload/listings/<PropertyID>/
+    # เก็บรูปของแต่ละรายการไว้ในโฟลเดอร์ย่อยตาม Property ID
     media_folder: "images/upload/listings/{{slug}}"
     public_folder: "/images/upload/listings/{{slug}}"
 
     summary: "{{title}} — ID: {{property_id}} — {{location}} — Rent ฿{{rent_price}} / Sale ฿{{sale_price}} — {{availability}}"
+
     fields:
       - { label: "Title", name: "title", widget: "string" }
-      - { label: "Property ID", name: "property_id", widget: "string", required: true, hint: "Use your own code (e.g. A815). Must be unique." }
+      - { label: "Property ID", name: "property_id", widget: "string", required: true, hint: "Use your own code (e.g. CDB-00246). Must be unique." }
       - label: "Date"
         name: "date"
         widget: "datetime"
@@ -91,11 +96,13 @@ collections:
       - { label: "Bathrooms", name: "bathrooms", widget: "number", value_type: "int", min: 0 }
       - { label: "Size (sqm)", name: "size", widget: "number", value_type: "float", min: 0, step: 0.5 }
       - { label: "Floor", name: "floor", widget: "number", min: 1, required: false }
+
       - label: "Cover image"
         name: "cover_image"
         widget: "image"
         required: false
         hint: "Shown first on the card. You can also reorder the Gallery below."
+
       - label: "Gallery"
         name: "images"
         widget: "list"
@@ -104,7 +111,9 @@ collections:
           - { label: "Image", name: "image", widget: "image" }
           - { label: "Caption (optional)", name: "caption", widget: "string", required: false }
           - { label: "Alt text (optional)", name: "alt", widget: "string", required: false }
+
       - { label: "Description", name: "body", widget: "markdown" }
+
       - label: "Owner (private)"
         name: "owner"
         widget: "relation"
