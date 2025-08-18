@@ -9,7 +9,6 @@ media_folder: "images/upload"
 public_folder: "/images/upload"
 
 # Built-in media library (must include name)
-media_library:
   name: upload
   config:
     folder_support: true
