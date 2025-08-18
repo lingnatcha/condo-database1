@@ -4,13 +4,9 @@ backend:
 
 site_url: https://condo-database.com
 
-# ใช้โฟลเดอร์เดียวตามนี้ (อย่าใช้ images/uploads/)
+# ที่เก็บไฟล์สื่อหลัก (อย่าใช้ images/uploads/)
 media_folder: "images/upload"
 public_folder: "/images/upload"
-
-# เปิดการท่องโฟลเดอร์ใน Media (Decap v3 เท่านั้น)
-media_library:
-  folder_support: true
 
 collections:
   - name: "owners"
@@ -31,15 +27,14 @@ collections:
     folder: "content/listings"
     create: true
 
-    # ใช้ Property ID เป็น slug ของไฟล์ content (เช่น content/listings/CDB-00246.md)
+    # ใช้ Property ID เป็น slug (เช่น content/listings/CDB-00246.md)
     slug: "{{fields.property_id}}"
 
-    # เก็บรูปของแต่ละรายการไว้ในโฟลเดอร์ย่อยตาม Property ID
+    # เก็บรูปของ entry นี้ในโฟลเดอร์ย่อยตาม Property ID
     media_folder: "images/upload/listings/{{slug}}"
     public_folder: "/images/upload/listings/{{slug}}"
 
     summary: "{{title}} — ID: {{property_id}} — {{location}} — Rent ฿{{rent_price}} / Sale ฿{{sale_price}} — {{availability}}"
-
     fields:
       - { label: "Title", name: "title", widget: "string" }
       - { label: "Property ID", name: "property_id", widget: "string", required: true, hint: "Use your own code (e.g. CDB-00246). Must be unique." }
