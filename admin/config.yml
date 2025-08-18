@@ -8,11 +8,6 @@ site_url: https://condo-database.com
 media_folder: "images/upload"
 public_folder: "/images/upload"
 
-# Built-in media library (must include name)
-  name: upload
-  config:
-    folder_support: true
-
 collections:
   - name: "owners"
     label: "Owners (private)"
@@ -32,10 +27,10 @@ collections:
     folder: "content/listings"
     create: true
 
-    # Use Property ID as slug (e.g. content/listings/A815.md)
+    # ใช้ Property ID เป็น slug (เช่น content/listings/A815.md)
     slug: "{{fields.property_id}}"
 
-    # Store images per-entry under images/upload/listings/<PropertyID>/
+    # รูปของแต่ละรายการจะถูกเก็บที่ images/upload/listings/<PropertyID>/
     media_folder: "images/upload/listings/{{slug}}"
     public_folder: "/images/upload/listings/{{slug}}"
 
