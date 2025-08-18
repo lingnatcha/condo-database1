@@ -4,15 +4,13 @@ backend:
 
 site_url: https://condo-database.com
 
-# point the CMS at the folder that contains your uploaded subfolders
+# Start the media browser at /images/upload (you can also set "images" if you want to see all top-level folders)
 media_folder: "images/upload"
 public_folder: "/images/upload"
 
-# enable sub-folder browsing (e.g. images/upload/CDB-00246)
+# Built-in media library with folder browsing (Decap v3 feature)
 media_library:
-  name: "default"
-  config:
-    folder_support: true
+  folder_support: true
 
 collections:
   - name: "owners"
