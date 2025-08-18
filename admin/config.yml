@@ -8,7 +8,7 @@ site_url: https://condo-database.com
 media_folder: "images/upload"
 public_folder: "/images/upload"
 
-# เปิดการท่องโฟลเดอร์ใน Media (Decap v3)
+# เปิดการท่องโฟลเดอร์ใน Media (Decap v3 เท่านั้น)
 media_library:
   folder_support: true
 
