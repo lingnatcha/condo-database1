@@ -4,7 +4,7 @@ backend:
 
 site_url: https://condo-database.com
 
-# ที่เก็บไฟล์สื่อหลัก (อย่าใช้ images/uploads/)
+# โฟลเดอร์เก็บไฟล์สื่อหลัก (อย่าใช้ images/uploads/)
 media_folder: "images/upload"
 public_folder: "/images/upload"
 
@@ -27,17 +27,21 @@ collections:
     folder: "content/listings"
     create: true
 
-    # ใช้ Property ID เป็น slug (เช่น content/listings/CDB-00246.md)
+    # ใช้ Property ID เป็นชื่อไฟล์ content (คงรูปแบบ/ตัวพิมพ์ตามที่พิมพ์)
     slug: "{{fields.property_id}}"
+    slugify:
+      lower: false  # อย่าบังคับเป็นตัวพิมพ์เล็ก
 
-    # เก็บรูปของ entry นี้ในโฟลเดอร์ย่อยตาม Property ID
-    media_folder: "images/upload/listings/{{slug}}"
-    public_folder: "/images/upload/listings/{{slug}}"
+    # เก็บรูปของแต่ละเอนทรีในโฟลเดอร์ย่อยตาม Property ID (คงตัวพิมพ์)
+    media_folder: "images/upload/listings/{{fields.property_id}}"
+    public_folder: "/images/upload/listings/{{fields.property_id}}"
 
     summary: "{{title}} — ID: {{property_id}} — {{location}} — Rent ฿{{rent_price}} / Sale ฿{{sale_price}} — {{availability}}"
+
     fields:
       - { label: "Title", name: "title", widget: "string" }
       - { label: "Property ID", name: "property_id", widget: "string", required: true, hint: "Use your own code (e.g. CDB-00246). Must be unique." }
+
       - label: "Date"
         name: "date"
         widget: "datetime"
@@ -45,22 +49,26 @@ collections:
         time_format: false
         required: false
         hint: "Used for 'Newest' sorting on the listings page"
+
       - label: "Availability"
         name: "availability"
         widget: "select"
         options: ["Available", "Rented", "Sold", "Reserved"]
         default: "Available"
+
       - label: "Rented until"
         name: "rented_until"
         widget: "datetime"
         date_format: "YYYY-MM-DD"
         time_format: false
         required: false
+
       - label: "Status"
         name: "status"
         widget: "select"
         options: ["Rent", "Sale", "Rent & Sale"]
         default: "Rent"
+
       - label: "Rent price (THB/month)"
         name: "rent_price"
         widget: "number"
@@ -68,6 +76,7 @@ collections:
         min: 0
         step: 1000
         required: false
+
       - label: "Sale price (THB)"
         name: "sale_price"
         widget: "number"
@@ -75,6 +84,7 @@ collections:
         min: 0
         step: 10000
         required: false
+
       - label: "Price (deprecated)"
         name: "price"
         widget: "number"
@@ -83,6 +93,7 @@ collections:
         step: 1000
         required: false
         hint: "Legacy field. Use Rent/Sale price above."
+
       - { label: "Project", name: "project", widget: "string" }
       - { label: "Location", name: "location", widget: "string", default: "Bangkok" }
       - { label: "Google Maps Link", name: "maps_url", widget: "string", required: false, hint: "Paste a full Google Maps URL (optional)" }
@@ -98,9 +109,12 @@ collections:
         required: false
         hint: "Shown first on the card. You can also reorder the Gallery below."
 
+      # แกลเลอรี (เพิ่มรูปทีละรายการได้สะดวกขึ้น)
       - label: "Gallery"
         name: "images"
         widget: "list"
+        allow_add: true
+        collapsed: false
         hint: "Upload multiple or choose existing. Drag to reorder."
         fields:
           - { label: "Image", name: "image", widget: "image" }
