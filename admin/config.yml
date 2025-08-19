@@ -4,11 +4,10 @@ backend:
 
 site_url: https://condo-database.com
 
-# ให้ Media library มองที่ images/upload/listings เป็นค่าเริ่มต้น
-media_folder: "images/upload/listings"
-public_folder: "/images/upload/listings"
+# ให้ Media library เห็นโฟลเดอร์หลัก (จะท่องต่อไปโฟลเดอร์ย่อยได้)
+media_folder: "images/upload"
+public_folder: "/images/upload"
 
-# เปิดโหมดท่องโฟลเดอร์ย่อยใน Media
 media_library:
   folder_support: true
 
@@ -31,16 +30,16 @@ collections:
     folder: "content/listings"
     create: true
 
+    # ชื่อไฟล์ content ใช้ Property ID ที่กรอก (คงตัวพิมพ์)
     slug: "{{fields.property_id}}"
     slugify:
       lower: false
 
-    # ใช้ slug ของเอนทรี (เช่น cdb-00246) ให้ตรงกับชื่อโฟลเดอร์จริง
+    # จุดสำคัญ: ใช้ {{slug}} (เช่น cdb-00246) ให้ตรงกับโฟลเดอร์จริง
     media_folder: "images/upload/listings/{{slug}}"
     public_folder: "/images/upload/listings/{{slug}}"
 
     summary: "{{title}} — ID: {{property_id}} — {{location}} — Rent ฿{{rent_price}} / Sale ฿{{sale_price}} — {{availability}}"
-    
 
     fields:
       - { label: "Title", name: "title", widget: "string" }
@@ -113,7 +112,6 @@ collections:
         required: false
         hint: "Shown first on the card. You can also reorder the Gallery below."
 
-      # แกลเลอรี
       - label: "Gallery"
         name: "images"
         widget: "list"
