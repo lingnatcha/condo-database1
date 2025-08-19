@@ -31,16 +31,16 @@ collections:
     folder: "content/listings"
     create: true
 
-    # ใช้ Property ID เป็นชื่อไฟล์ content (คงรูปแบบ/ตัวพิมพ์)
     slug: "{{fields.property_id}}"
     slugify:
       lower: false
 
-    # เก็บรูปของเอนทรีนี้ในโฟลเดอร์ย่อยตาม Property ID (คงตัวพิมพ์)
-    media_folder: "images/upload/listings/{{fields.property_id}}"
-    public_folder: "/images/upload/listings/{{fields.property_id}}"
+    # ใช้ slug ของเอนทรี (เช่น cdb-00246) ให้ตรงกับชื่อโฟลเดอร์จริง
+    media_folder: "images/upload/listings/{{slug}}"
+    public_folder: "/images/upload/listings/{{slug}}"
 
     summary: "{{title}} — ID: {{property_id}} — {{location}} — Rent ฿{{rent_price}} / Sale ฿{{sale_price}} — {{availability}}"
+    
 
     fields:
       - { label: "Title", name: "title", widget: "string" }
