@@ -4,9 +4,13 @@ backend:
 
 site_url: https://condo-database.com
 
-# โฟลเดอร์เก็บไฟล์สื่อหลัก (อย่าใช้ images/uploads/)
-media_folder: "images/upload"
-public_folder: "/images/upload"
+# ให้ Media library มองที่ images/upload/listings เป็นค่าเริ่มต้น
+media_folder: "images/upload/listings"
+public_folder: "/images/upload/listings"
+
+# เปิดโหมดท่องโฟลเดอร์ย่อยใน Media
+media_library:
+  folder_support: true
 
 collections:
   - name: "owners"
@@ -27,12 +31,12 @@ collections:
     folder: "content/listings"
     create: true
 
-    # ใช้ Property ID เป็นชื่อไฟล์ content (คงรูปแบบ/ตัวพิมพ์ตามที่พิมพ์)
+    # ใช้ Property ID เป็นชื่อไฟล์ content (คงรูปแบบ/ตัวพิมพ์)
     slug: "{{fields.property_id}}"
     slugify:
-      lower: false  # อย่าบังคับเป็นตัวพิมพ์เล็ก
+      lower: false
 
-    # เก็บรูปของแต่ละเอนทรีในโฟลเดอร์ย่อยตาม Property ID (คงตัวพิมพ์)
+    # เก็บรูปของเอนทรีนี้ในโฟลเดอร์ย่อยตาม Property ID (คงตัวพิมพ์)
     media_folder: "images/upload/listings/{{fields.property_id}}"
     public_folder: "/images/upload/listings/{{fields.property_id}}"
 
@@ -109,7 +113,7 @@ collections:
         required: false
         hint: "Shown first on the card. You can also reorder the Gallery below."
 
-      # แกลเลอรี (เพิ่มรูปทีละรายการได้สะดวกขึ้น)
+      # แกลเลอรี
       - label: "Gallery"
         name: "images"
         widget: "list"
