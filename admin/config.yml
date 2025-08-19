@@ -4,12 +4,9 @@ backend:
 
 site_url: https://condo-database.com
 
-# ให้ Media library เห็นโฟลเดอร์หลัก (จะท่องต่อไปโฟลเดอร์ย่อยได้)
+# ให้ Media library เห็นโฟลเดอร์หลัก
 media_folder: "images/upload"
 public_folder: "/images/upload"
-
-media_library:
-  folder_support: true
 
 collections:
   - name: "owners"
@@ -30,12 +27,12 @@ collections:
     folder: "content/listings"
     create: true
 
-    # ชื่อไฟล์ content ใช้ Property ID ที่กรอก (คงตัวพิมพ์)
+    # ใช้ Property ID เป็นชื่อไฟล์ content (คงรูปแบบ/ตัวพิมพ์)
     slug: "{{fields.property_id}}"
     slugify:
       lower: false
 
-    # จุดสำคัญ: ใช้ {{slug}} (เช่น cdb-00246) ให้ตรงกับโฟลเดอร์จริง
+    # ใช้ slug ของเอนทรี (เช่น cdb-00246) เพื่อให้ตรงกับชื่อโฟลเดอร์จริง
     media_folder: "images/upload/listings/{{slug}}"
     public_folder: "/images/upload/listings/{{slug}}"
 
@@ -132,4 +129,4 @@ collections:
         search_fields: ["name", "phone", "email"]
         value_field: "{{slug}}"
         display_fields: ["name", "phone"]
-        required: false
+        required
